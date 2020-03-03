@@ -6,11 +6,13 @@ import (
 	"github.com/acm-uiuc/core/database"
 )
 
+type Mark string
 const (
-	MarkBasic string = "BASIC"
-	MarkPaid string = "PAID"
-	MarkRecruiter string = "RECRUITER"
+	MarkBasic Mark = "BASIC"
+	MarkPaid Mark = "PAID"
+	MarkRecruiter Mark = "RECRUITER"
 )
+var validMarks = []Mark{MarkBasic, MarkPaid, MarkRecruiter}
 
 type UserData struct {
 	Username string `db:"username"`
@@ -23,7 +25,7 @@ type UserData struct {
 
 type UserService interface {
 	Create(data UserData) error
-	Mark(username string, mark string) error
+	Mark(username string, mark Mark) error
 	GetInfo(username string) (UserData, error)
 	GetInfos() ([]UserData, error)
 }
