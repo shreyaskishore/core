@@ -12,7 +12,8 @@ type migration struct {
 }
 
 var migrations []migration = []migration{
-	migration{name: "create_schema", command: create_schema},
+	migration{name: "create_tokens_table", command: create_tokens_table},
+	migration{name: "create_users_table", command: create_users_table},
 }
 
 func Migrate(startName string) error {
@@ -22,10 +23,14 @@ func Migrate(startName string) error {
 	}
 
 	startIndex := -1
-	for index, elem := range migrations {
-		if elem.name == startName {
-			startIndex = index
-			break
+	if startName == "all" {
+		startIndex = 0
+	} else {
+		for index, elem := range migrations {
+			if elem.name == startName {
+				startIndex = index
+				break
+			}
 		}
 	}
 

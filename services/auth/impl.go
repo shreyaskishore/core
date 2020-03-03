@@ -31,10 +31,6 @@ type tokenRow struct {
 	Expiration int64 `db:"expiration"`
 }
 
-// TODO: Persist tokens in a sql table
-// Stores token -> username
-var tokens = map[string]string{}
-
 func (service *authImpl) Login(username string, password string) (string, error) {
 	// Start with ldap login and fall back to local login if needed
 	loginStrategies := [](func(string, string) (bool, error)){service.ldapLogin, service.localLogin}
