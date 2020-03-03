@@ -24,8 +24,8 @@ type GroupMember struct {
 
 type GroupType string
 const (
-	GroupCommittee GroupType = "committee"
-	GroupSIG GroupType = "sig"
+	GroupCommittee GroupType = "committees"
+	GroupSIG GroupType = "sigs"
 )
 var validGroupTypes = []GroupType{GroupCommittee, GroupSIG}
 

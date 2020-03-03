@@ -110,7 +110,7 @@ func (service *groupImpl) refreshData() error {
 	}
 
 	data := groupData {}
-	err = yaml.Unmarshal(rawData, &data)
+	err = yaml.Unmarshal(rawData, &data.groups)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal raw data: %w", err)
 	}
