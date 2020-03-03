@@ -57,25 +57,90 @@ func (service *userImpl) GetInfos() ([]UserData, error) {
 }
 
 func (service *userImpl) validateUser(data UserData) error {
-	return nil // TODO: Implement
+	// TODO: Implement user data validate
+	// For now everything is treated as valid
+	return nil
 }
 
 func (service *userImpl) addUser(data UserData) error {
-	return nil // TODO: Implement
+	_, err := service.db.NamedExec("INSERT INTO users (username, first_name, last_name, graduation_year, major, mark) VALUES (:username, :first_name, :last_name, :graduation_year, :major, :mark)", data)
+	if err != nil {
+		fmt.Errorf("failed to add user to database: %w", err)
+	}
+
+	return nil
 }
 
 func (service *userImpl) validateMark(mark Mark) error {
-	return nil // TODO: Implement
+	for _, validMark := range validMarks {
+		if mark == validMark {
+			return nil
+		}
+	}
+
+	return fmt.Errorf("invalid mark: %s", mark)
 }
 
 func (service *userImpl) setMark(username string, mark Mark) error {
-	return nil // TODO: Implement
+	params := UserData {
+		Username: username,
+		Mark: string(mark),
+	}
+
+	_, err := service.db.NamedExec("UPDATE users SET mark=:mark WHERE username=:username", params)
+	if err != nil {
+		return fmt.Errorf("failed to update mark: %w", err)
+	}
+
+	return nil
 }
 
 func (service *userImpl) getUser(username string) (UserData, error) {
-	return UserData{}, nil // TODO: Implement
+	params := UserData {
+		Username: username,
+	}
+
+	rows, err := service.db.NamedQuery("SELECT * FROM users WHERE username=:username", params)
+	if err != nil {
+		return UserData{}, fmt.Errorf("failed to query database for user: %w", err)
+	}
+
+	result := UserData {}
+	for rows.Next() {
+		err := rows.StructScan(&result)
+		if err != nil {
+			return UserData{}, fmt.Errorf("failed to decode row from database: %w", err)
+		}
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return UserData{}, fmt.Errorf("failed reading rows from database: %w", err)
+	}
+
+	return result, nil
 }
 
 func (service *userImpl) getUsers() ([]UserData, error) {
-	return []UserData{}, nil // TODO: Implement
+	rows, err := service.db.NamedQuery("SELECT * FROM users", struct{}{})
+	if err != nil {
+		return []UserData{}, fmt.Errorf("failed to query database for users: %w", err)
+	}
+
+	results := []UserData {}
+	for rows.Next() {
+		result := UserData {}
+		err := rows.StructScan(&result)
+		if err != nil {
+			return []UserData{}, fmt.Errorf("failed to decode row from database: %w", err)
+		}
+		results = append(results, result)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return []UserData{}, fmt.Errorf("failed reading rows from database: %w", err)
+	}
+
+	return results, nil
 }
