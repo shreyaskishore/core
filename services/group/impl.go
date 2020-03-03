@@ -2,11 +2,18 @@ package group
 
 import (
 	"fmt"
+	"net/http"
+	"io/ioutil"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 const (
 	dataTTL = 15
+
+	// TODO: Update this to use the real group store in the future
+	dataURI = "https://gist.githubusercontent.com/ASankaran/a8f36ebb498a2098a9d49d5fbaf530cd/raw/932e382783b3bfe0fcc65937a7e2a35b1d6de128/groups.yaml"
 )
 
 type groupImpl struct {
@@ -90,7 +97,25 @@ func (service *groupImpl) Verify(username string, groupType GroupType, groupName
 }
 
 func (service *groupImpl) refreshData() error {
-	// TODO: Pull the group data from github and parse into a groupData
+	resp, err := http.Get(dataURI)
+	if err != nil {
+		return fmt.Errorf("failed to retrieve data: %w", err)
+	}
+
+	defer resp.Body.Close()
+
+	rawData, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("failed to read raw data: %w", err)
+	}
+
+	data := groupData {}
+	err = yaml.Unmarshal(rawData, &data)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal raw data: %w", err)
+	}
+
+	service.data = data
 	service.lastUpdated = time.Now().Unix()
 
 	return nil
