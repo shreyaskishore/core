@@ -1,5 +1,9 @@
 package group
 
+import (
+	"fmt"
+)
+
 type Group struct {
 	Name string
 	Description string
@@ -18,12 +22,28 @@ type GroupMember struct {
 	Email string
 }
 
+type GroupType string
+const (
+	GroupCommittee GroupType = "committee"
+	GroupSIG GroupType = "sig"
+)
+var validGroupTypes = []GroupType{GroupCommittee, GroupSIG}
+
 type GroupService interface {
 	GetMemberships(username string) ([]string, error)
-	GetGroups(groupType string) ([]Group, error)
-	Verify(username string, groupName string) (bool, error)
+	GetGroups(groupType GroupType) ([]Group, error)
+	Verify(username string, groupType GroupType, groupName string) (bool, error)
 }
 
 func New() (GroupService, error) {
-	return &groupImpl{}, nil
+	service := &groupImpl {
+		lastUpdated: 0,
+	}
+	
+	err := service.refreshData()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create group service: %w", err)
+	}
+
+	return service, nil
 }
