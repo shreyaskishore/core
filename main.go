@@ -8,6 +8,7 @@ import (
 
 	_ "github.com/acm-uiuc/core/services/auth"
 	_ "github.com/acm-uiuc/core/services/user"
+	_ "github.com/acm-uiuc/core/services/group"
 )
 
 type cliFlags struct {
