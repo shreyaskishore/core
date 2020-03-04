@@ -29,6 +29,11 @@ const (
 )
 var validGroupTypes = []GroupType{GroupCommittee, GroupSIG}
 
+const (
+	GroupTop4 string = "Top4"
+	GroupCorporate string = "Corporate"
+)
+
 type GroupService interface {
 	GetMemberships(username string) ([]string, error)
 	GetGroups(groupType GroupType) ([]Group, error)

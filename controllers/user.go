@@ -6,6 +6,7 @@ import (
 
 	"github.com/acm-uiuc/core/controllers/context"
 	"github.com/acm-uiuc/core/services/user"
+	"github.com/acm-uiuc/core/services/group"
 )
 
 type CreateUserRequest struct {
@@ -19,6 +20,15 @@ type CreateUserResponse struct {
 }
 
 func (controller *Controller) CreateUserController(ctx *context.CoreContext) error {
+	if !ctx.HasValidToken() {
+		return fmt.Errorf("unauthorized: %w",
+			ctx.JSON(http.StatusUnauthorized, &CreateUserResponse {
+				Success: false,
+				Message: "Invalid Authorization",
+			}),
+		)
+	}
+
 	req := &CreateUserRequest {}
 	err := ctx.Bind(req)
 	if err != nil {
@@ -59,6 +69,15 @@ type MarkUserResponse struct {
 }
 
 func (controller *Controller) MarkUserController(ctx *context.CoreContext) error {
+	if !ctx.HasMembership(group.GroupTop4) {
+		return fmt.Errorf("unauthorized: %w",
+			ctx.JSON(http.StatusUnauthorized, &MarkUserResponse {
+				Success: false,
+				Message: "Invalid Authorization",
+			}),
+		)
+	}
+
 	req := &MarkUserRequest {}
 	err := ctx.Bind(req)
 	if err != nil {
@@ -108,6 +127,15 @@ func (controller *Controller) GetUserController(ctx *context.CoreContext) error 
 		)
 	}
 
+	if !(ctx.IsRecruiter() || (ctx.HasValidToken() && ctx.Username == req.Username)) {
+		return fmt.Errorf("unauthorized: %w",
+			ctx.JSON(http.StatusUnauthorized, &MarkUserResponse {
+				Success: false,
+				Message: "Invalid Authorization",
+			}),
+		)
+	}
+
 	info, err := controller.svcs.User.GetInfo(req.Username)
 	if err != nil {
 		return fmt.Errorf("failed to get user: %w",
@@ -136,6 +164,15 @@ type GetUsersResponse struct {
 }
 
 func (controller *Controller) GetUsersController(ctx *context.CoreContext) error {
+	if !(ctx.IsRecruiter() || ctx.HasMembership(group.GroupTop4) || ctx.HasMembership(group.GroupCorporate)) {
+		return fmt.Errorf("unauthorized: %w",
+			ctx.JSON(http.StatusUnauthorized, &MarkUserResponse {
+				Success: false,
+				Message: "Invalid Authorization",
+			}),
+		)
+	}
+
 	req := &GetUsersRequest {}
 	err := ctx.Bind(req)
 	if err != nil {

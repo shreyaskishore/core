@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/acm-uiuc/core/controllers/context"
+	"github.com/acm-uiuc/core/services/group"
 )
 
 type LoginRequest struct {
@@ -138,6 +139,15 @@ type LocalAccountResponse struct {
 }
 
 func (controller *Controller) LocalAccountController(ctx *context.CoreContext) error {
+	if !(ctx.HasMembership(group.GroupTop4) || ctx.HasMembership(group.GroupCorporate)) {
+		return fmt.Errorf("unauthorized: %w",
+			ctx.JSON(http.StatusUnauthorized, &LocalAccountResponse {
+				Success: false,
+				Message: "Invalid Authorization",
+			}),
+		)
+	}
+
 	req := &LocalAccountRequest {}
 	err := ctx.Bind(req)
 	if err != nil {
