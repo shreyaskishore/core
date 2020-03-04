@@ -1,12 +1,11 @@
 package middlewares
 
 import (
-	"fmt"
-
 	"github.com/labstack/echo"
 
 	"github.com/acm-uiuc/core/controllers/context"
 	"github.com/acm-uiuc/core/services"
+	"github.com/acm-uiuc/core/services/user"
 )
 
 func ContextExtender(svcs services.Services) (func(echo.HandlerFunc) echo.HandlerFunc) {
@@ -14,26 +13,33 @@ func ContextExtender(svcs services.Services) (func(echo.HandlerFunc) echo.Handle
 		return func(ctx echo.Context) error {
 			token := ctx.Request().Header.Get("Authorization")
 
-			username, err := svcs.Auth.Verify(token)
-			if err != nil {
-				return fmt.Errorf("failed to verify token: %w", err)
+			username := ""
+			foundUsername, err := svcs.Auth.Verify(token)
+			if err == nil {
+				username = foundUsername
 			}
 
-			info, err := svcs.User.GetInfo(username)
-			if err != nil {
-				return fmt.Errorf("failed to get user info: %w", err)
+			mark := string(user.MarkBasic)
+			if username != "" {
+				info, err := svcs.User.GetInfo(username)
+				if err == nil {
+					mark = info.Mark
+				}
 			}
 
-			memberships, err := svcs.Group.GetMemberships(username)
-			if err != nil {
-				return fmt.Errorf("failed to get memberships: %w", err)
+			memberships := []string{}
+			if username != "" {
+				foundMemberships, err := svcs.Group.GetMemberships(username)
+				if err == nil {
+					memberships = foundMemberships
+				}
 			}
 
 			coreContext := &context.CoreContext {
 				Context: ctx,
 				Username: username,
 				Memberships: memberships,
-				Mark: string(info.Mark),
+				Mark: mark,
 			}
 
 			return next(coreContext)
