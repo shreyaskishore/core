@@ -25,13 +25,16 @@ func New(svcs services.Services) Controller {
 	controller.Use(middleware.Logger())
 	controller.Use(middleware.Recover())
 	controller.Use(middlewares.ContextExtender)
-	// TODO: Add more middlewares
 
 	controller.POST("/auth/login", ContextConverter(controller.LoginController))
 	controller.POST("/auth/logout", ContextConverter(controller.LogoutController))
 	controller.POST("/auth/verify", ContextConverter(controller.VerifyController))
 	controller.POST("/auth/local", ContextConverter(controller.LocalAccountController))
-	// TODO: Add more routes
+
+	controller.POST("/user/create", ContextConverter(controller.CreateUserController))
+	controller.POST("/user/mark", ContextConverter(controller.MarkUserController))
+	controller.POST("/user/find", ContextConverter(controller.GetUserController))
+	controller.POST("/user/all", ContextConverter(controller.GetUsersController))
 
 	return controller
 }
