@@ -10,10 +10,7 @@ import (
 
 type CreateUserRequest struct {
 	Username string `json:"username"`
-	FirstName string `json:"first_name"`
-	LastName string `json:"last_name"`
-	GraduationYear int32 `json:"graduation_year"`
-	Major string `json:"major"`
+	user.UserData
 }
 
 type CreateUserResponse struct {
@@ -33,14 +30,9 @@ func (controller *Controller) CreateUserController(ctx *context.CoreContext) err
 		)
 	}
 
-	err = controller.svcs.User.Create(user.UserData {
-		Username: req.Username,
-		FirstName: req.FirstName,
-		LastName: req.LastName,
-		GraduationYear: req.GraduationYear,
-		Major: req.Major,
-		Mark: string(user.MarkBasic),
-	})
+	req.Mark = string(user.MarkBasic)
+
+	err = controller.svcs.User.Create(req.UserData)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w",
 			ctx.JSON(http.StatusBadRequest, &CreateUserResponse {
@@ -101,12 +93,7 @@ type GetUserRequest struct {
 type GetUserResponse struct {
 	Success bool `json:"success`
 	Message string `json:"message"`
-	Username string `json:"username"`
-	FirstName string `json:"first_name"`
-	LastName string `json:"last_name"`
-	GraduationYear int32 `json:"graduation_year"`
-	Major string `json:"major"`
-	Mark string `json:"mark"`
+	user.UserData
 }
 
 func (controller *Controller) GetUserController(ctx *context.CoreContext) error {
@@ -117,12 +104,6 @@ func (controller *Controller) GetUserController(ctx *context.CoreContext) error 
 			ctx.JSON(http.StatusInternalServerError, &GetUserResponse {
 				Success: false,
 				Message: "Internal Error",
-				Username: "",
-				FirstName: "",
-				LastName: "",
-				GraduationYear: 0,
-				Major: "",
-				Mark: "",
 			}),
 		)
 	}
@@ -133,12 +114,6 @@ func (controller *Controller) GetUserController(ctx *context.CoreContext) error 
 			ctx.JSON(http.StatusBadRequest, &GetUserResponse {
 				Success: false,
 				Message: "Invalid Username",
-				Username: "",
-				FirstName: "",
-				LastName: "",
-				GraduationYear: 0,
-				Major: "",
-				Mark: "",
 			}),
 		)
 	}
@@ -146,12 +121,7 @@ func (controller *Controller) GetUserController(ctx *context.CoreContext) error 
 	return ctx.JSON(http.StatusOK, &GetUserResponse {
 		Success: true,
 		Message: "Successful User Retrieval",
-		Username: info.Username,
-		FirstName: info.FirstName,
-		LastName: info.LastName,
-		GraduationYear: info.GraduationYear,
-		Major: info.Major,
-		Mark: info.Mark,
+		UserData: info,
 	})
 }
 
@@ -162,14 +132,7 @@ type GetUsersRequest struct {
 type GetUsersResponse struct {
 	Success bool `json:"success`
 	Message string `json:"message"`
-	Users []struct{
-		Username string `json:"username"`
-		FirstName string `json:"first_name"`
-		LastName string `json:"last_name"`
-		GraduationYear int32 `json:"graduation_year"`
-		Major string `json:"major"`
-		Mark string `json:"mark"`
-	}
+	Users []user.UserData
 }
 
 func (controller *Controller) GetUsersController(ctx *context.CoreContext) error {
@@ -180,7 +143,6 @@ func (controller *Controller) GetUsersController(ctx *context.CoreContext) error
 			ctx.JSON(http.StatusInternalServerError, &GetUsersResponse {
 				Success: false,
 				Message: "Internal Error",
-				Users: nil,
 			}),
 		)
 	}
@@ -191,34 +153,14 @@ func (controller *Controller) GetUsersController(ctx *context.CoreContext) error
 			ctx.JSON(http.StatusBadRequest, &GetUsersResponse {
 				Success: false,
 				Message: "Invalid Username",
-				Users: nil,
 			}),
 		)
 	}
 
-	resp := &GetUsersResponse {
+
+	return ctx.JSON(http.StatusOK, &GetUsersResponse {
 		Success: true,
 		Message: "Successful Users Retrieval",
-		Users: nil,
-	}
-
-	for _, info := range infos {
-		resp.Users = append(resp.Users, struct{
-			Username string `json:"username"`
-			FirstName string `json:"first_name"`
-			LastName string `json:"last_name"`
-			GraduationYear int32 `json:"graduation_year"`
-			Major string `json:"major"`
-			Mark string `json:"mark"`
-		} {
-			Username: info.Username,
-			FirstName: info.FirstName,
-			LastName: info.LastName,
-			GraduationYear: info.GraduationYear,
-			Major: info.Major,
-			Mark: info.Mark,
-		})
-	}
-
-	return ctx.JSON(http.StatusOK, resp)
+		Users: infos,
+	})
 }
