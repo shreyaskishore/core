@@ -24,7 +24,7 @@ func New(svcs services.Services) Controller {
 
 	controller.Use(middleware.Logger())
 	controller.Use(middleware.Recover())
-	controller.Use(middlewares.ContextExtender)
+	controller.Use(middlewares.ContextExtender(controller.svcs))
 
 	controller.POST("/auth/login", ContextConverter(controller.LoginController))
 	controller.POST("/auth/logout", ContextConverter(controller.LogoutController))
