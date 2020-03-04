@@ -7,6 +7,7 @@ import (
 	"github.com/acm-uiuc/core/database/migrations"
 
 	"github.com/acm-uiuc/core/services"
+	"github.com/acm-uiuc/core/controllers"
 )
 
 type cliFlags struct {
@@ -31,14 +32,14 @@ func main() {
 	}
 
 	if flags.server {
-		_, err := services.New()
+		svcs, err := services.New()
 		if err != nil {
 			fmt.Printf("%s\n", err.Error())
 			return
 		}
 
-		// TODO: Bind controller and endpoints to services
-
+		controller := controllers.New(svcs)
+		controller.Start(":8000")
 		return
 	}
 }
