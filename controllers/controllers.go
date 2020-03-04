@@ -28,6 +28,9 @@ func New(svcs services.Services) Controller {
 	// TODO: Add more middlewares
 
 	controller.POST("/auth/login", ContextConverter(controller.LoginController))
+	controller.POST("/auth/logout", ContextConverter(controller.LogoutController))
+	controller.POST("/auth/verify", ContextConverter(controller.VerifyController))
+	controller.POST("/auth/local", ContextConverter(controller.LocalAccountController))
 	// TODO: Add more routes
 
 	return controller
