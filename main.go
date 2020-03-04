@@ -13,12 +13,14 @@ import (
 type cliFlags struct {
 	migration string
 	server bool
+	site string
 }
 
 func main() {
 	flags := cliFlags{}
-	flag.StringVar(&flags.migration, "migration", "", "the migration to start from")
+	flag.StringVar(&flags.migration, "migration", "", "migration to start from")
 	flag.BoolVar(&flags.server, "server", false, "enable to run the server")
+	flag.StringVar(&flags.site, "site", "", "path to serve site from")
 	flag.Parse()
 
 	if flags.migration != "" {
@@ -38,7 +40,7 @@ func main() {
 			return
 		}
 
-		controller := controllers.New(svcs)
+		controller := controllers.New(svcs, flags.site)
 		controller.Start(":8000")
 		return
 	}

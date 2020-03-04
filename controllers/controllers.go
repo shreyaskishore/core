@@ -16,7 +16,7 @@ type Controller struct {
 	svcs services.Services
 }
 
-func New(svcs services.Services) Controller {
+func New(svcs services.Services, site string) Controller {
 	controller := Controller {
 		echo.New(),
 		svcs,
@@ -39,6 +39,10 @@ func New(svcs services.Services) Controller {
 	controller.POST("/group/memberships", ContextConverter(controller.MembershipsController))
 	controller.POST("/group/groups", ContextConverter(controller.GroupsController))
 	controller.POST("/group/verify", ContextConverter(controller.VerifyGroupController))
+
+	if site != "" {
+		controller.Static("/", site)
+	}
 
 	return controller
 }
