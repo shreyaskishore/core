@@ -36,6 +36,10 @@ func New(svcs services.Services) Controller {
 	controller.POST("/user/find", ContextConverter(controller.GetUserController))
 	controller.POST("/user/all", ContextConverter(controller.GetUsersController))
 
+	controller.POST("/group/memberships", ContextConverter(controller.MembershipsController))
+	controller.POST("/group/groups", ContextConverter(controller.GroupsController))
+	controller.POST("/group/verify", ContextConverter(controller.VerifyGroupController))
+
 	return controller
 }
 
