@@ -13,9 +13,9 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	Success bool
-	Token string
-	Message string
+	Success bool `json:"success`
+	Token string `json:"token"`
+	Message string `json:"message"`
 }
 
 func (controller *Controller) LoginController(ctx *context.CoreContext) error {
