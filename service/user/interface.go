@@ -1,6 +1,9 @@
 package user
 
 import (
+	"fmt"
+
+	"github.com/acm-uiuc/core/database"
 	"github.com/acm-uiuc/core/model"
 )
 
@@ -12,5 +15,12 @@ type UserService interface {
 }
 
 func New() (UserService, error) {
-	return nil, nil
+	db, err := database.New()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user service: %w", err)
+	}
+
+	return &userImpl{
+		db: db,
+	}, nil
 }
