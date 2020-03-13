@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	_ "github.com/acm-uiuc/core/controller"
 	_ "github.com/acm-uiuc/core/database/migration"
 	"github.com/acm-uiuc/core/service"
 )
