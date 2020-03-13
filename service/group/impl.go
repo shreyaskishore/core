@@ -8,14 +8,12 @@ import (
 
 	"gopkg.in/yaml.v2"
 
+	"github.com/acm-uiuc/core/config"
 	"github.com/acm-uiuc/core/model"
 )
 
 const (
 	dataTTL = 15
-
-	// TODO: Update this to use the real group store in the future
-	dataURI = "https://gist.githubusercontent.com/ASankaran/a8f36ebb498a2098a9d49d5fbaf530cd/raw/932e382783b3bfe0fcc65937a7e2a35b1d6de128/groups.yaml"
 )
 
 type groupImpl struct {
@@ -59,7 +57,12 @@ func (service *groupImpl) VerifyMembership(username string, groupType string, gr
 }
 
 func (service *groupImpl) refreshData() error {
-	resp, err := http.Get(dataURI)
+	uri, err := config.GetConfigValue("GROUP_URI")
+	if err != nil {
+		return fmt.Errorf("failed to get group data uri: %w", err)
+	}
+
+	resp, err := http.Get(uri)
 	if err != nil {
 		return fmt.Errorf("failed to retrieve data: %w", err)
 	}
