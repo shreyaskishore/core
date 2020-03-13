@@ -71,7 +71,7 @@ func (service *groupImpl) refreshData() error {
 		return fmt.Errorf("failed to read raw data: %w", err)
 	}
 
-	err = yaml.Unmarshal(rawData, service.data)
+	err = yaml.Unmarshal(rawData, &service.data)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal raw data: %w", err)
 	}
