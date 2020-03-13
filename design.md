@@ -27,7 +27,8 @@ Token {
 
 User {
 	Username string
-	Name string
+	FirstName string
+	LastName string
 	GraduationYear int
 	Major string
 	Resume string
