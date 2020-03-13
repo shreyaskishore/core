@@ -20,13 +20,13 @@ GET   /api/group/verify
 ## Database Models
 ```
 Token {
-	Netid string
+	Username string
 	Token string
 	Expiration int64
 }
 
 User {
-	Netid string
+	Username string
 	Name string
 	GraduationYear int
 	Major string
