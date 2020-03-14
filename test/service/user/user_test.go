@@ -1,1 +1,118 @@
 package user_test
+
+import (
+	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/acm-uiuc/core/database"
+	"github.com/acm-uiuc/core/model"
+	"github.com/acm-uiuc/core/service/user"
+)
+
+func setupTest() error {
+	db, err := database.New()
+	if err != nil {
+		return fmt.Errorf("failed to get database handle: %w", err)
+	}
+
+	_, err = db.Exec("DELETE FROM users")
+	if err != nil {
+		return fmt.Errorf("failed to clean table: %w", err)
+	}
+
+	return nil
+
+}
+
+func TestCreateAndGetUser(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := user.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedUser := model.User{
+		Username:       "fake",
+		FirstName:      "fake",
+		LastName:       "fake",
+		GraduationYear: 2021,
+		Major:          "Computer Science",
+		Resume:         "http://fake.resume",
+		Mark:           model.UserMarkBasic,
+	}
+
+	err = svc.CreateUser(expectedUser)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	user, err := svc.GetUser(expectedUser.Username)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(&expectedUser, user) {
+		t.Fatalf("expected '%+v', got '%+v'", &expectedUser, user)
+	}
+}
+
+func TestCreateAndGetUsers(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := user.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedUserOne := model.User{
+		Username:       "fake1",
+		FirstName:      "fake1",
+		LastName:       "fake1",
+		GraduationYear: 2021,
+		Major:          "Computer Science",
+		Resume:         "http://fake1.resume",
+		Mark:           model.UserMarkBasic,
+	}
+
+	expectedUserTwo := model.User{
+		Username:       "fake2",
+		FirstName:      "fake2",
+		LastName:       "fake2",
+		GraduationYear: 2022,
+		Major:          "Computer Engineering",
+		Resume:         "http://fake1.resume",
+		Mark:           model.UserMarkBasic,
+	}
+
+	err = svc.CreateUser(expectedUserOne)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = svc.CreateUser(expectedUserTwo)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	users, err := svc.GetUsers()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedCount := 2
+	if len(users) != expectedCount {
+		t.Fatalf("expected '%d', got '%d'", expectedCount, len(users))
+	}
+
+	if !((reflect.DeepEqual(expectedUserOne, users[0]) && reflect.DeepEqual(expectedUserTwo, users[1])) || (reflect.DeepEqual(expectedUserOne, users[1]) && reflect.DeepEqual(expectedUserTwo, users[0]))) {
+		t.Fatalf("expected '%+v' and '%+v', got '%+v' and '%+v'", expectedUserOne, expectedUserTwo, users[0], users[1])
+	}
+}
