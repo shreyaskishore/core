@@ -8,6 +8,7 @@ import (
 
 	"github.com/acm-uiuc/core/context"
 	"github.com/acm-uiuc/core/middleware"
+	"github.com/acm-uiuc/core/model"
 	"github.com/acm-uiuc/core/service"
 
 	"github.com/acm-uiuc/core/controller/auth"
@@ -42,10 +43,10 @@ func New(svc *service.Service) (*Controller, error) {
 	controller.GET("/api/auth/:provider/redirect", ContextConverter(authController.GetOAuthRedirectLanding))
 	controller.POST("/api/auth/:provider", ContextConverter(authController.GetToken))
 
-	controller.GET("/api/user", ContextConverter(userController.GetUser))
-	controller.POST("/api/user", ContextConverter(userController.CreateUser))
-	controller.GET("/api/user/filter", ContextConverter(userController.GetUsers))
-	controller.POST("/api/user/mark", ContextConverter(userController.MarkUser))
+	controller.GET("/api/user", Chain(userController.GetUser, middleware.AuthorizeMark(controller.svc, model.UserValidMarks)))
+	controller.POST("/api/user", Chain(userController.CreateUser, middleware.AuthorizeMark(controller.svc, model.UserValidMarks)))
+	controller.GET("/api/user/filter", Chain(userController.GetUsers, middleware.AuthorizeMark(controller.svc, []string{model.UserMarkRecruiter})))
+	controller.POST("/api/user/mark", Chain(userController.MarkUser, middleware.AuthorizeCommittee(controller.svc, []string{"Top4"})))
 
 	controller.GET("/api/group", ContextConverter(groupController.GetGroups))
 	controller.POST("/api/group/verify", ContextConverter(groupController.VerifyMembership))
@@ -61,4 +62,13 @@ func ContextConverter(handler func(*context.Context) error) func(echo.Context) e
 		}
 		return handler(ctx)
 	}
+}
+
+func Chain(handler func(*context.Context) error, middlewares ...(func(next echo.HandlerFunc) echo.HandlerFunc)) func(echo.Context) error {
+	aggregated := ContextConverter(handler)
+	for i := range middlewares {
+		aggregated = middlewares[len(middlewares)-i-1](aggregated)
+	}
+
+	return aggregated
 }

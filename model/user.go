@@ -15,3 +15,7 @@ const (
 	UserMarkPaid      = "PAID"
 	UserMarkRecruiter = "RECRUITER"
 )
+
+var (
+	UserValidMarks = []string{UserMarkBasic, UserMarkPaid, UserMarkRecruiter}
+)

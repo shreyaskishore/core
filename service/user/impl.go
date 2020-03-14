@@ -8,10 +8,6 @@ import (
 	"github.com/acm-uiuc/core/model"
 )
 
-var (
-	validMarks = []string{"BASIC", "PAID", "RECRUITER"}
-)
-
 type userImpl struct {
 	db *sqlx.DB
 }
@@ -132,7 +128,7 @@ func (service *userImpl) getUsers() ([]model.User, error) {
 }
 
 func (service *userImpl) validateMark(mark string) error {
-	for _, validMark := range validMarks {
+	for _, validMark := range model.UserValidMarks {
 		if mark == validMark {
 			return nil
 		}
