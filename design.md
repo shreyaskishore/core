@@ -13,7 +13,7 @@ POST  /api/user
 GET   /api/user/filter
 POST  /api/user/mark
 
-GET   /api/group/filter
+GET   /api/group
 GET   /api/group/verify
 ```
 
