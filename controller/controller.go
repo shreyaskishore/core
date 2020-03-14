@@ -10,7 +10,7 @@ import (
 	"github.com/acm-uiuc/core/middleware"
 	"github.com/acm-uiuc/core/service"
 
-	_ "github.com/acm-uiuc/core/controller/auth"
+	"github.com/acm-uiuc/core/controller/auth"
 	"github.com/acm-uiuc/core/controller/docs"
 	_ "github.com/acm-uiuc/core/controller/group"
 	_ "github.com/acm-uiuc/core/controller/user"
@@ -28,12 +28,17 @@ func New(svc *service.Service) (*Controller, error) {
 	}
 
 	docsController := docs.New(controller.svc)
+	authController := auth.New(controller.svc)
 
 	controller.Use(echoMiddleware.Logger())
 	controller.Use(echoMiddleware.Recover())
 	controller.Use(middleware.Context(controller.svc))
 
 	controller.GET("/api", ContextConverter(docsController.Documentation))
+
+	controller.GET("/api/auth/:provider", ContextConverter(authController.GetOAuthRedirect))
+	controller.GET("/api/auth/:provider/redirect", ContextConverter(authController.GetOAuthRedirectLanding))
+	controller.POST("/api/auth/:provider", ContextConverter(authController.GetToken))
 	// TODO: Register routes
 
 	return controller, nil
