@@ -29,8 +29,7 @@ func (controller *AuthController) GetOAuthRedirect(ctx *context.Context) error {
 }
 
 func (controller *AuthController) GetOAuthRedirectLanding(ctx *context.Context) error {
-	// TODO: Render a page that exchanges code for token using the auth endpoint
-	return ctx.String(http.StatusOK, "Not Implemented")
+	return ctx.Render(http.StatusOK, "redirect", nil)
 }
 
 func (controller *AuthController) GetToken(ctx *context.Context) error {
