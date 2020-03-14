@@ -7,5 +7,6 @@ import (
 )
 
 func Documentation(ctx *context.Context) error {
+	// TODO: Add documentation for the endpoints
 	return ctx.String(http.StatusOK, "Hello World!")
 }
