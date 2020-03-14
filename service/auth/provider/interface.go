@@ -2,6 +2,8 @@ package provider
 
 import (
 	"fmt"
+
+	"github.com/acm-uiuc/core/config"
 )
 
 type OAuthProvider interface {
@@ -10,6 +12,22 @@ type OAuthProvider interface {
 	GetVerifiedEmail(token string) (string, error)
 }
 
+var providers map[string]OAuthProvider = map[string]OAuthProvider{}
+
 func GetProvider(provider string) (OAuthProvider, error) {
-	return nil, fmt.Errorf("not implemented")
+	isTest, err := config.GetConfigValue("IS_TEST")
+	if err != nil {
+		return nil, fmt.Errorf("failed to check if in test: %w", err)
+	}
+
+	if isTest == "true" {
+		return &FakeOAuth{}, nil
+	}
+
+	oauth, ok := providers[provider]
+	if !ok {
+		return nil, fmt.Errorf("invalid provider: %s", provider)
+	}
+
+	return oauth, nil
 }
