@@ -70,3 +70,32 @@ func TestGetGroups(t *testing.T) {
 		t.Fatalf("expected '%+v', got '%+v'", expected, committees[0])
 	}
 }
+
+func TestVerifyMembership(t *testing.T) {
+	svc, err := group.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	username := "arnavs3"
+	isMember, err := svc.VerifyMembership(username, model.GroupCommittees, model.GroupTop4)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := true
+	if isMember != expected {
+		t.Fatalf("expect '%t', got '%t'", expected, isMember)
+	}
+
+	username = "fake"
+	isMember, err = svc.VerifyMembership(username, model.GroupCommittees, model.GroupTop4)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected = false
+	if isMember != expected {
+		t.Fatalf("expect '%t', got '%t'", expected, isMember)
+	}
+}
