@@ -10,6 +10,7 @@ import (
 	"github.com/acm-uiuc/core/middleware"
 	"github.com/acm-uiuc/core/model"
 	"github.com/acm-uiuc/core/service"
+	"github.com/acm-uiuc/core/template"
 
 	"github.com/acm-uiuc/core/controller/auth"
 	"github.com/acm-uiuc/core/controller/docs"
@@ -19,14 +20,23 @@ import (
 
 type Controller struct {
 	*echo.Echo
-	svc *service.Service
+	svc  *service.Service
+	tmpl *template.Template
 }
 
 func New(svc *service.Service) (*Controller, error) {
+	tmpl, err := template.New()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create templates: %w", err)
+	}
+
 	controller := &Controller{
 		Echo: echo.New(),
 		svc:  svc,
+		tmpl: tmpl,
 	}
+
+	controller.Echo.Renderer = controller.tmpl
 
 	docsController := docs.New(controller.svc)
 	authController := auth.New(controller.svc)
