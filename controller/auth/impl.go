@@ -29,7 +29,13 @@ func (controller *AuthController) GetOAuthRedirect(ctx *context.Context) error {
 }
 
 func (controller *AuthController) GetOAuthRedirectLanding(ctx *context.Context) error {
-	return ctx.Render(http.StatusOK, "redirect", nil)
+	params := struct {
+		Provider string
+	}{
+		Provider: "google",
+	}
+
+	return ctx.Render(http.StatusOK, "redirect", params)
 }
 
 func (controller *AuthController) GetToken(ctx *context.Context) error {
