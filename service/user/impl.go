@@ -63,8 +63,12 @@ func (service *userImpl) MarkUser(username string, mark string) error {
 }
 
 func (service *userImpl) validateUser(user *model.User) error {
-	// TODO: Implement user data validate
-	// For now everything is treated as valid
+	if user.Mark != model.UserMarkBasic {
+		return fmt.Errorf("invalid user mark: %s", user.Mark)
+	}
+
+	// TODO: Implement further user data validate
+
 	return nil
 }
 

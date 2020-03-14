@@ -9,3 +9,9 @@ type User struct {
 	Resume         string `db:"resume" json:"resume"`
 	Mark           string `db:"mark" json:"mark"`
 }
+
+const (
+	UserMarkBasic     = "BASIC"
+	UserMarkPaid      = "PAID"
+	UserMarkRecruiter = "RECRUITER"
+)
