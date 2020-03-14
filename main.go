@@ -3,21 +3,15 @@ package main
 import (
 	"fmt"
 
-	"github.com/acm-uiuc/core/controller"
 	_ "github.com/acm-uiuc/core/database/migration"
-	"github.com/acm-uiuc/core/service"
+	"github.com/acm-uiuc/core/server"
 )
 
 func main() {
-	svc, err := service.New()
+	svr, err := server.New()
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	controller, err := controller.New(svc)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	controller.Start(":8000")
+	svr.Start(":8000")
 }
