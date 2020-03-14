@@ -19,5 +19,5 @@ func main() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(controller)
+	controller.Start(":8000")
 }
