@@ -1,5 +1,9 @@
 package provider
 
+import (
+	"fmt"
+)
+
 type OAuthProvider interface {
 	GetOAuthRedirect() (string, error)
 	GetOAuthToken(code string) (string, error)
@@ -7,5 +11,5 @@ type OAuthProvider interface {
 }
 
 func GetProvider(provider string) (OAuthProvider, error) {
-	return nil, nil
+	return nil, fmt.Errorf("not implemented")
 }

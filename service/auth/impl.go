@@ -126,5 +126,9 @@ func (service *authImpl) tokenToUsername(tokenString string) (string, error) {
 		return "", fmt.Errorf("failed reading rows from database: %w", err)
 	}
 
+	if result.Username == "" {
+		return "", fmt.Errorf("invalid token: %s", tokenString)
+	}
+
 	return result.Username, nil
 }

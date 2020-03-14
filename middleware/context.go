@@ -14,9 +14,13 @@ func Context(svc *service.Service) func(echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			token := ctx.Request().Header.Get("Authorization")
 
-			username, err := svc.Auth.Verify(token)
-			if err != nil {
-				return ctx.String(http.StatusForbidden, "Invalid Authorization Token")
+			username := ""
+			if token != "" {
+				var err error
+				username, err = svc.Auth.Verify(token)
+				if err != nil {
+					return ctx.String(http.StatusForbidden, "Invalid Authorization Token")
+				}
 			}
 
 			extCtx := &context.Context{
