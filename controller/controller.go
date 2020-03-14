@@ -50,8 +50,6 @@ func New(svc *service.Service) (*Controller, error) {
 	controller.GET("/api/group", ContextConverter(groupController.GetGroups))
 	controller.POST("/api/group/verify", ContextConverter(groupController.VerifyMembership))
 
-	// TODO: Register routes
-
 	return controller, nil
 }
 
