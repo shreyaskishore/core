@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -10,7 +11,12 @@ import (
 	"github.com/acm-uiuc/core/service"
 )
 
-func AuthorizeMark(svc *service.Service, marks []string) func(echo.HandlerFunc) echo.HandlerFunc {
+type AuthorizeMatchParameters struct {
+	Marks      []string
+	Committees []string
+}
+
+func AuthorizeMatchAny(svc *service.Service, match AuthorizeMatchParameters) func(echo.HandlerFunc) echo.HandlerFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			ctx, ok := c.(*context.Context)
@@ -18,20 +24,18 @@ func AuthorizeMark(svc *service.Service, marks []string) func(echo.HandlerFunc) 
 				return ctx.String(http.StatusForbidden, "Invalid Context")
 			}
 
-			user, err := svc.User.GetUser(ctx.Username)
+			isMarkMatch, err := hasMarkMatch(svc, ctx.Username, match.Marks)
 			if err != nil {
-				return ctx.String(http.StatusForbidden, "Could Not Find User")
+				return ctx.String(http.StatusForbidden, "Failed Mark Match")
 			}
 
-			validMark := false
-			for _, mark := range marks {
-				if user.Mark == mark {
-					validMark = true
-				}
+			isCommitteeMatch, err := hasCommitteeMatch(svc, ctx.Username, match.Committees)
+			if err != nil {
+				return ctx.String(http.StatusForbidden, "Failed Committee Match")
 			}
 
-			if !validMark {
-				return ctx.String(http.StatusForbidden, "Invalid User Mark")
+			if !isMarkMatch && !isCommitteeMatch {
+				return ctx.String(http.StatusForbidden, "Invalid Authorization Matches")
 			}
 
 			return next(ctx)
@@ -39,31 +43,32 @@ func AuthorizeMark(svc *service.Service, marks []string) func(echo.HandlerFunc) 
 	}
 }
 
-func AuthorizeCommittee(svc *service.Service, committees []string) func(echo.HandlerFunc) echo.HandlerFunc {
-	return func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			ctx, ok := c.(*context.Context)
-			if !ok {
-				return ctx.String(http.StatusForbidden, "Invalid Context")
-			}
+func hasMarkMatch(svc *service.Service, username string, marks []string) (bool, error) {
+	user, err := svc.User.GetUser(username)
+	if err != nil {
+		return false, fmt.Errorf("failed to find user: %w", err)
+	}
 
-			validCommittee := false
-			for _, committee := range committees {
-				isMember, err := svc.Group.VerifyMembership(ctx.Username, model.GroupCommittees, committee)
-				if err != nil {
-					return ctx.String(http.StatusForbidden, "Failed Verifying Membership")
-				}
-
-				if isMember {
-					validCommittee = true
-				}
-			}
-
-			if !validCommittee {
-				return ctx.String(http.StatusForbidden, "Invalid Group Membership")
-			}
-
-			return next(ctx)
+	for _, mark := range marks {
+		if user.Mark == mark {
+			return true, nil
 		}
 	}
+
+	return false, nil
+}
+
+func hasCommitteeMatch(svc *service.Service, username string, committees []string) (bool, error) {
+	for _, committee := range committees {
+		isMember, err := svc.Group.VerifyMembership(username, model.GroupCommittees, committee)
+		if err != nil {
+			return false, fmt.Errorf("failed verifying membership: %w", err)
+		}
+
+		if isMember {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }

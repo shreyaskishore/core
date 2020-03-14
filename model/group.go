@@ -21,4 +21,6 @@ type GroupMember struct {
 const (
 	GroupCommittees = "committees"
 	GroupSIGs       = "sigs"
+
+	GroupTop4 = "Top4"
 )

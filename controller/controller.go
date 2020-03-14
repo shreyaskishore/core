@@ -37,19 +37,66 @@ func New(svc *service.Service) (*Controller, error) {
 	controller.Use(echoMiddleware.Recover())
 	controller.Use(middleware.Context(controller.svc))
 
-	controller.GET("/api", ContextConverter(docsController.Documentation))
+	controller.GET(
+		"/api",
+		Chain(docsController.Documentation),
+	)
 
-	controller.GET("/api/auth/:provider", ContextConverter(authController.GetOAuthRedirect))
-	controller.GET("/api/auth/:provider/redirect", ContextConverter(authController.GetOAuthRedirectLanding))
-	controller.POST("/api/auth/:provider", ContextConverter(authController.GetToken))
+	controller.GET(
+		"/api/auth/:provider",
+		Chain(authController.GetOAuthRedirect),
+	)
+	controller.GET(
+		"/api/auth/:provider/redirect",
+		Chain(authController.GetOAuthRedirectLanding),
+	)
+	controller.POST(
+		"/api/auth/:provider",
+		Chain(authController.GetToken),
+	)
 
-	controller.GET("/api/user", Chain(userController.GetUser, middleware.AuthorizeMark(controller.svc, model.UserValidMarks)))
-	controller.POST("/api/user", Chain(userController.CreateUser, middleware.AuthorizeMark(controller.svc, model.UserValidMarks)))
-	controller.GET("/api/user/filter", Chain(userController.GetUsers, middleware.AuthorizeMark(controller.svc, []string{model.UserMarkRecruiter})))
-	controller.POST("/api/user/mark", Chain(userController.MarkUser, middleware.AuthorizeCommittee(controller.svc, []string{"Top4"})))
+	controller.GET(
+		"/api/user",
+		Chain(userController.GetUser, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Marks: model.UserValidMarks,
+			},
+		)),
+	)
+	controller.POST(
+		"/api/user",
+		Chain(userController.CreateUser, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Marks: model.UserValidMarks,
+			},
+		)),
+	)
+	controller.GET(
+		"/api/user/filter",
+		Chain(userController.GetUsers, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Marks:      []string{model.UserMarkRecruiter},
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
+	controller.POST(
+		"/api/user/mark",
+		Chain(userController.MarkUser, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
 
-	controller.GET("/api/group", ContextConverter(groupController.GetGroups))
-	controller.POST("/api/group/verify", ContextConverter(groupController.VerifyMembership))
+	controller.GET(
+		"/api/group",
+		Chain(groupController.GetGroups),
+	)
+	controller.POST(
+		"/api/group/verify",
+		Chain(groupController.VerifyMembership),
+	)
 
 	return controller, nil
 }
