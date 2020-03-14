@@ -12,7 +12,9 @@ type OAuthProvider interface {
 	GetVerifiedEmail(token string) (string, error)
 }
 
-var providers map[string]OAuthProvider = map[string]OAuthProvider{}
+var providers map[string]OAuthProvider = map[string]OAuthProvider{
+	"google": &GoogleOAuth{},
+}
 
 func GetProvider(provider string) (OAuthProvider, error) {
 	isTest, err := config.GetConfigValue("IS_TEST")

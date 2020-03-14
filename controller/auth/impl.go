@@ -25,7 +25,7 @@ func (controller *AuthController) GetOAuthRedirect(ctx *context.Context) error {
 		return ctx.String(http.StatusBadRequest, "Invalid Provider")
 	}
 
-	return ctx.Redirect(http.StatusMovedPermanently, uri)
+	return ctx.Redirect(http.StatusFound, uri)
 }
 
 func (controller *AuthController) GetOAuthRedirectLanding(ctx *context.Context) error {
