@@ -116,3 +116,55 @@ func TestCreateAndGetUsers(t *testing.T) {
 		t.Fatalf("expected '%+v' and '%+v', got '%+v' and '%+v'", expectedUserOne, expectedUserTwo, users[0], users[1])
 	}
 }
+
+func TestCreateAndMarkAndGetUser(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := user.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedUser := model.User{
+		Username:       "fake",
+		FirstName:      "fake",
+		LastName:       "fake",
+		GraduationYear: 2021,
+		Major:          "Computer Science",
+		Resume:         "http://fake.resume",
+		Mark:           model.UserMarkBasic,
+	}
+
+	err = svc.CreateUser(expectedUser)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	user, err := svc.GetUser(expectedUser.Username)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(&expectedUser, user) {
+		t.Fatalf("expected '%+v', got '%+v'", &expectedUser, user)
+	}
+
+	err = svc.MarkUser(expectedUser.Username, model.UserMarkPaid)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedUser.Mark = model.UserMarkPaid
+
+	user, err = svc.GetUser(expectedUser.Username)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(&expectedUser, user) {
+		t.Fatalf("expected '%+v', got '%+v'", &expectedUser, user)
+	}
+}
