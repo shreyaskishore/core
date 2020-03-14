@@ -17,3 +17,8 @@ type GroupMember struct {
 	DisplayName string `yaml:"displayName`
 	Email       string `yaml:"email`
 }
+
+const (
+	GroupCommittees = "committees"
+	GroupSIGs       = "sigs"
+)
