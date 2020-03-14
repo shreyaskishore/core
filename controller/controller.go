@@ -27,11 +27,13 @@ func New(svc *service.Service) (*Controller, error) {
 		svc:  svc,
 	}
 
+	docsController := docs.New(controller.svc)
+
 	controller.Use(echoMiddleware.Logger())
 	controller.Use(echoMiddleware.Recover())
 	controller.Use(middleware.Context(controller.svc))
 
-	controller.GET("/api", ContextConverter(docs.Documentation))
+	controller.GET("/api", ContextConverter(docsController.Documentation))
 	// TODO: Register routes
 
 	return controller, nil
