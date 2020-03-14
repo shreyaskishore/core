@@ -1,9 +1,11 @@
 package auth_test
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
+	"github.com/acm-uiuc/core/database"
 	"github.com/acm-uiuc/core/service/auth"
 )
 
@@ -11,7 +13,27 @@ const (
 	provider = "fake"
 )
 
+func setupTest() error {
+	db, err := database.New()
+	if err != nil {
+		return fmt.Errorf("failed to get database handle: %w", err)
+	}
+
+	_, err = db.Exec("DELETE FROM users")
+	if err != nil {
+		return fmt.Errorf("failed to clean table: %w", err)
+	}
+
+	return nil
+
+}
+
 func TestGetOAuthRedirect(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	svc, err := auth.New()
 	if err != nil {
 		t.Fatal(err)
@@ -29,6 +51,11 @@ func TestGetOAuthRedirect(t *testing.T) {
 }
 
 func TestAuthorize(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	svc, err := auth.New()
 	if err != nil {
 		t.Fatal(err)
