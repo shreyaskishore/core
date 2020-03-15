@@ -5,9 +5,8 @@
     <body>
         <script>
             const code = (new URLSearchParams(window.location.search)).get("code");
-            console.log(code);
-
             const provider = {{.Provider}};
+
             fetch("/api/auth/" + provider, {
                 method: "POST",
                 headers: {
@@ -19,8 +18,8 @@
             }).then(res => {
                 return res.json();
             }).then(data => {
-                console.log(data);
-                sessionStorage["token"] = data.token;
+                localStorage.setItem('token', data.token);
+                window.location.replace("/");
             }
             )
         </script>
