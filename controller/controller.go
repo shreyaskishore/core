@@ -133,6 +133,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.History),
 	)
 
+	controller.GET(
+		"/reflectionsprojections",
+		Chain(siteController.ReflectionsProjections),
+	)
+
 	return controller, nil
 }
 

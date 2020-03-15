@@ -59,3 +59,26 @@ func (controller *SiteController) History(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "history", params)
 }
+
+func (controller *SiteController) ReflectionsProjections(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+		Editions      []struct {
+			Year int
+			Uri  string
+		}
+	}{
+		Authenticated: ctx.LoggedIn,
+		Editions: []struct {
+			Year int
+			Uri  string
+		}{
+			{
+				Year: 2019,
+				Uri:  "https://2019.reflectionsprojections.org",
+			},
+		},
+	}
+
+	return ctx.Render(http.StatusOK, "reflectionsprojections", params)
+}
