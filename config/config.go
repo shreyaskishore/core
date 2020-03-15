@@ -13,6 +13,7 @@ var defaultConfig = map[string]string{
 	"GROUP_URI":           "https://gist.githubusercontent.com/ASankaran/a8f36ebb498a2098a9d49d5fbaf530cd/raw/932e382783b3bfe0fcc65937a7e2a35b1d6de128/groups.yaml",
 	"IS_TEST":             "false",
 	"TEMPLATE_SRCS":       "template/*.html",
+	"STATIC_BASE":         "static/",
 	"OAUTH_REDIRECT_URI":  "http://localhost:8000/api/auth/google/redirect",
 	"OAUTH_GOOGLE_ID":     "",
 	"OAUTH_GOOGLE_SECRET": "",

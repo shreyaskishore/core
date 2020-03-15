@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo"
 	echoMiddleware "github.com/labstack/echo/middleware"
 
+	"github.com/acm-uiuc/core/config"
 	"github.com/acm-uiuc/core/context"
 	"github.com/acm-uiuc/core/middleware"
 	"github.com/acm-uiuc/core/model"
@@ -45,9 +46,16 @@ func New(svc *service.Service) (*Controller, error) {
 	groupController := group.New(controller.svc)
 	siteController := site.New(controller.svc)
 
+	staticBase, err := config.GetConfigValue("STATIC_BASE")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get static base")
+	}
+
 	controller.Use(echoMiddleware.Logger())
 	controller.Use(echoMiddleware.Recover())
 	controller.Use(middleware.Context(controller.svc))
+
+	controller.Static("/static", staticBase)
 
 	controller.GET(
 		"/api",

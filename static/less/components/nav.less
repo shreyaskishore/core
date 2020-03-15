@@ -1,0 +1,189 @@
+/**
+* Copyright © 2017, ACM@UIUC
+*
+* This file is part of the Groot Project.  
+* 
+* The Groot Project is open source software, released under the University of
+* Illinois/NCSA Open Source License. You should have received a copy of
+* this license in a file with the distribution.
+**/
+
+.nav-loc a {
+    color: @font-color;
+    .monospace-font();
+    background: @background-color;
+    font-weight: normal;
+}
+
+.nav-loc:hover {
+    color: @font-color;
+    .monospace-font();
+}
+
+#header-logo {
+    transform: translateY(5%);
+}
+
+#title {
+    margin-left: 0px;
+    transform: translateY(65%);
+}
+
+#title-text {
+    display: inline-block;
+    transform: translateY(15%);
+}
+
+#subtitle {
+    display: inline-block;
+    transform: translate(75%, -55%);
+    color: @header-color;
+    font-size: 1.1em;
+    //display:none;
+}
+
+#nav-home:hover {
+    text-decoration: none;
+}
+
+.logo {
+    display: inline-block;
+    height:56px;width:auto
+}
+
+.top-bar{
+    color: @font-color !important;
+    background: @background-color;
+}
+
+.top-bar ul{
+    color: @font-color !important;
+    background: @background-color;
+}
+
+.top-bar-left{
+    color: @font-color !important;
+    background: @background-color;
+}
+
+.top-bar-right{
+    color: @font-color !important;
+    background: @background-color;
+}
+
+#nav-login {
+    margin-top: 15px;
+    padding-bottom: 15px;
+}
+
+#login {
+    padding-bottom: 15px;
+    transform: translateY(-15%);
+}
+
+#menu {
+    background-color: @background-color;
+    padding-right: 7px;
+}
+
+#menu img {
+    height: 30px;
+    bottom: 10px;
+}
+
+#mobile-nav {
+    display: none;
+    z-index:100;
+    height: 100px;
+    position:absolute;
+    top:-75px; bottom:0; right:0px;
+    width:400px;
+    padding-top: 100px;
+    margin-left: -10px;
+    padding-left: -10px;
+    background-color: @background-color;
+
+}
+
+#menu-close {
+    float: right;
+    background-color: @background-color;
+    padding-top: 0px;
+    left: -10px;
+}
+#menu-close img {
+    height: 30px;
+    bottom: 10px;
+}
+
+.side-nav {
+    list-style-type: none;
+    margin-left: -10px;
+}
+
+.nav-loc-side {
+    text-decoration: none;
+    height: 55px;
+    text-align: center;
+}
+
+
+@media screen and (min-width: 640px) {
+    .mobile {
+        display: none;
+    }
+    .desktop {
+        display: block;
+    }
+    #mobile-nav {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1250px) {
+    .mobile {
+        display: block;
+    }
+    .desktop {
+        display: none;
+    }
+    #mobile-nav {
+        margin: 0 auto; 
+    }
+
+    #mobile-nav li a {
+        display: inline-block;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .html {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    .mobile {
+        display: inline;
+        width: 100%;
+    }
+    .desktop {
+        display: none;
+    }
+    #we-are {
+        display: none;
+    }
+    .mobile-right {
+        //margin-left: 50% !important;
+        width: 50% !important;
+    }
+    #menu-container {
+        float: right;
+    }
+    .mobile-left {
+        width: 50% !important;
+        float: left;
+    }
+    #mobile-nav {
+        width:100vw;
+    }
+}

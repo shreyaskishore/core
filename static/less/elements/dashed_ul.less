@@ -1,0 +1,41 @@
+/**
+* Copyright © 2017, ACM@UIUC
+*
+* This file is part of the Groot Project.  
+* 
+* The Groot Project is open source software, released under the University of
+* Illinois/NCSA Open Source License. You should have received a copy of
+* this license in a file with the distribution.
+**/
+
+ul.dashed {
+  margin: 0;
+}
+ul.dashed {
+  list-style-type: none;
+}
+ul.dashed > li {
+  text-indent: -5px;
+  color: @font-color;
+}
+ul.dashed > li:before {
+  content: "- ";
+  text-indent: -5px;
+}
+ul.dashed > li > a{
+  text-indent: -5px;
+  color: @font-color;
+}
+
+ul.dashed > li > a:hover{
+  text-indent: -5px;
+  color: @font-color;
+  .monospace-font();
+  text-decoration: underline;
+}
+
+
+ul.dashed > li > h5 {
+  text-indent: -5px;
+  color: @font-color;
+}

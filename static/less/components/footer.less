@@ -1,0 +1,88 @@
+/**
+* Copyright © 2017, ACM@UIUC
+*
+* This file is part of the Groot Project.  
+* 
+* The Groot Project is open source software, released under the University of
+* Illinois/NCSA Open Source License. You should have received a copy of
+* this license in a file with the distribution.
+**/
+
+.footer {
+    background-color: @font-color-neg;
+    padding: 0.5rem 0.1rem;
+    text-align: center;
+    color: #fff;
+    bottom: 0;
+    width: 100%;
+    .monospace-font();
+}
+
+.footer p, .footer a {
+    font-weight: 300;
+    font-size: 1em;
+    margin-top: 20px;
+    color: @font-color;
+    .monospace-font();
+}
+.footer-links {
+    list-style-type: none;
+}
+
+.footer-links li {
+    margin-top: .5em;
+}
+
+i.logo#github {
+    height: 32px !important;
+    margin-top: 18px;
+    margin-left: -2px;
+    float: right;
+}
+i.logo#twitter {
+    height: 28px !important;
+    margin-top: 20px;
+    float: right;
+}
+i.logo#fb {
+    height: 28px !important;
+    margin-top: 20px;
+    float: right;
+}
+i.logo#medium {
+    height: 28px !important;
+    margin-top: 20px;
+    float: right;
+}
+
+
+@media screen and (min-width: 425px) {
+    i.logo {
+        font-size: 1.4em;
+        padding: 0 0 0.75rem 0.75rem;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    i.logo {
+        font-size: 1.0em;
+        padding-right: .25rem;
+    }
+}
+
+img.logo#illinois {
+    height: 48px !important;
+    margin-top: 7px;
+    float: left;
+}
+
+#confetti {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 10000;
+    pointer-events:none;
+    display: none;
+}
