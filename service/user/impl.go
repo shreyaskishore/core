@@ -69,7 +69,7 @@ func (service *userImpl) validateUser(user *model.User) error {
 }
 
 func (service *userImpl) addUser(user *model.User) error {
-	_, err := service.db.NamedExec("INSERT INTO users (username, first_name, last_name, graduation_year, major, resume, mark) VALUES (:username, :first_name, :last_name, :graduation_year, :major, :resume, :mark)", user)
+	_, err := service.db.NamedExec("INSERT INTO users (username, first_name, last_name, graduation_year, major, mark) VALUES (:username, :first_name, :last_name, :graduation_year, :major, :mark)", user)
 	if err != nil {
 		fmt.Errorf("failed to add user to database: %w", err)
 	}

@@ -6,7 +6,6 @@ type User struct {
 	LastName       string `db:"last_name" json:"last_name"`
 	GraduationYear int32  `db:"graduation_year" json:"graduation_year"`
 	Major          string `db:"major" json:"major"`
-	Resume         string `db:"resume" json:"resume"`
 	Mark           string `db:"mark" json:"mark"`
 }
 

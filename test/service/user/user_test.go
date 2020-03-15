@@ -42,7 +42,6 @@ func TestCreateAndGetUser(t *testing.T) {
 		LastName:       "fake",
 		GraduationYear: 2021,
 		Major:          "Computer Science",
-		Resume:         "http://fake.resume",
 		Mark:           model.UserMarkBasic,
 	}
 
@@ -78,7 +77,6 @@ func TestCreateAndGetUsers(t *testing.T) {
 		LastName:       "fake1",
 		GraduationYear: 2021,
 		Major:          "Computer Science",
-		Resume:         "http://fake1.resume",
 		Mark:           model.UserMarkBasic,
 	}
 
@@ -88,7 +86,6 @@ func TestCreateAndGetUsers(t *testing.T) {
 		LastName:       "fake2",
 		GraduationYear: 2022,
 		Major:          "Computer Engineering",
-		Resume:         "http://fake1.resume",
 		Mark:           model.UserMarkBasic,
 	}
 
@@ -134,7 +131,6 @@ func TestCreateAndMarkAndGetUser(t *testing.T) {
 		LastName:       "fake",
 		GraduationYear: 2021,
 		Major:          "Computer Science",
-		Resume:         "http://fake.resume",
 		Mark:           model.UserMarkBasic,
 	}
 

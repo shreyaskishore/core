@@ -7,7 +7,6 @@ CREATE TABLE users (
 	last_name VARCHAR(64) NOT NULL,
 	graduation_year INTEGER NOT NULL,
 	major VARCHAR(32) NOT NULL,
-	resume VARCHAR(1024) NOT NULL,
 	mark VARCHAR(32) NOT NULL,
 	UNIQUE KEY unique_username (username)
 );
