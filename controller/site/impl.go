@@ -276,3 +276,21 @@ func (controller *SiteController) Login(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "login", params)
 }
+
+func (controller *SiteController) Logout(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+	}{
+		Authenticated: ctx.LoggedIn,
+	}
+
+	ctx.SetCookie(&http.Cookie{
+		Name:     "token",
+		Value:    "",
+		MaxAge:   -1,
+		Path:     "/",
+		HttpOnly: true,
+	})
+
+	return ctx.Render(http.StatusOK, "logout", params)
+}

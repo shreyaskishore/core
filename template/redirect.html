@@ -1,32 +1,27 @@
 {{define "redirect"}}
 {{template "header" .}}
 
-<html>
-    <head>
-    </head>
-    <body>
-        <script>
-            const code = (new URLSearchParams(window.location.search)).get("code");
-            const provider = {{.Provider}};
 
-            fetch("/api/auth/" + provider, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    code: code,
-                }),
-            }).then(res => {
-                return res.json();
-            }).then(data => {
-                window.location.replace("/");
-            }
-            )
-        </script>
-    </body>
-    Verifying Acount...
-</html>
+<script>
+    const code = (new URLSearchParams(window.location.search)).get("code");
+    const provider = {{.Provider}};
+
+    fetch("/api/auth/" + provider, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            code: code,
+        }),
+    }).then(res => {
+        return res.json();
+    }).then(data => {
+        window.location.replace("/");
+    }
+    )
+</script>
+Verifying Acount...
 
 {{template "footer" .}}
 {{end}}
