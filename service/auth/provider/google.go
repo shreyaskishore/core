@@ -126,5 +126,48 @@ func (oauth *GoogleOAuth) GetOAuthToken(code string) (string, error) {
 }
 
 func (oauth *GoogleOAuth) GetVerifiedEmail(token string) (string, error) {
-	return "fake@illinois.edu", nil
+	uri := url.URL{
+		Scheme: "https",
+		Host:   "www.googleapis.com",
+		Path:   "oauth2/v1/userinfo",
+	}
+
+	req, err := http.NewRequest("GET", uri.String(), nil)
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+
+	client := http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to make request: %w", err)
+	}
+
+	defer resp.Body.Close()
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("failed to read response body: %w", err)
+	}
+
+	email := struct {
+		Email      string `json:"email"`
+		IsVerified bool   `json:"verified_email"`
+	}{}
+
+	err = json.Unmarshal(respBody, &token)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode response body: %w", err)
+	}
+
+	if !email.IsVerified || email.Email == "" {
+		return "", fmt.Errorf("invalid authorization")
+	}
+
+	return email.Email, nil
 }
