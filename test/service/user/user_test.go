@@ -37,12 +37,10 @@ func TestCreateAndGetUser(t *testing.T) {
 	}
 
 	expectedUser := model.User{
-		Username:       "fake",
-		FirstName:      "fake",
-		LastName:       "fake",
-		GraduationYear: 2021,
-		Major:          "Computer Science",
-		Mark:           model.UserMarkBasic,
+		Username:  "fake",
+		FirstName: "fake",
+		LastName:  "fake",
+		Mark:      model.UserMarkBasic,
 	}
 
 	err = svc.CreateUser(expectedUser)
@@ -72,21 +70,17 @@ func TestCreateAndGetUsers(t *testing.T) {
 	}
 
 	expectedUserOne := model.User{
-		Username:       "fake1",
-		FirstName:      "fake1",
-		LastName:       "fake1",
-		GraduationYear: 2021,
-		Major:          "Computer Science",
-		Mark:           model.UserMarkBasic,
+		Username:  "fake1",
+		FirstName: "fake1",
+		LastName:  "fake1",
+		Mark:      model.UserMarkBasic,
 	}
 
 	expectedUserTwo := model.User{
-		Username:       "fake2",
-		FirstName:      "fake2",
-		LastName:       "fake2",
-		GraduationYear: 2022,
-		Major:          "Computer Engineering",
-		Mark:           model.UserMarkBasic,
+		Username:  "fake2",
+		FirstName: "fake2",
+		LastName:  "fake2",
+		Mark:      model.UserMarkBasic,
 	}
 
 	err = svc.CreateUser(expectedUserOne)
@@ -126,12 +120,10 @@ func TestCreateAndMarkAndGetUser(t *testing.T) {
 	}
 
 	expectedUser := model.User{
-		Username:       "fake",
-		FirstName:      "fake",
-		LastName:       "fake",
-		GraduationYear: 2021,
-		Major:          "Computer Science",
-		Mark:           model.UserMarkBasic,
+		Username:  "fake",
+		FirstName: "fake",
+		LastName:  "fake",
+		Mark:      model.UserMarkBasic,
 	}
 
 	err = svc.CreateUser(expectedUser)
