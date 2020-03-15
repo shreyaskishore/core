@@ -123,6 +123,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.Home),
 	)
 
+	controller.GET(
+		"/about",
+		Chain(siteController.About),
+	)
+
 	return controller, nil
 }
 

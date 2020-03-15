@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/acm-uiuc/core/context"
+	"github.com/acm-uiuc/core/model"
 	"github.com/acm-uiuc/core/service"
 )
 
@@ -25,4 +26,26 @@ func (controller *SiteController) Home(ctx *context.Context) error {
 	}
 
 	return ctx.Render(http.StatusOK, "home", params)
+}
+
+func (controller *SiteController) About(ctx *context.Context) error {
+	groups, err := controller.svc.Group.GetGroups()
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Groups")
+	}
+
+	committees, ok := groups[model.GroupCommittees]
+	if !ok {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Committees")
+	}
+
+	params := struct {
+		Authenticated bool
+		Committees    []model.Group
+	}{
+		Authenticated: ctx.LoggedIn,
+		Committees:    committees,
+	}
+
+	return ctx.Render(http.StatusOK, "about", params)
 }
