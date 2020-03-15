@@ -61,6 +61,7 @@ func (controller *AuthController) GetToken(ctx *context.Context) error {
 		Value:   token.Token,
 		Expires: time.Unix(token.Expiration, 0),
 		Path:    "/",
+		HttpOnly: true,
 	})
 
 	return ctx.JSON(http.StatusOK, token)
