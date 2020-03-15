@@ -160,7 +160,7 @@ func (oauth *GoogleOAuth) GetVerifiedEmail(token string) (string, error) {
 		IsVerified bool   `json:"verified_email"`
 	}{}
 
-	err = json.Unmarshal(respBody, &token)
+	err = json.Unmarshal(respBody, &email)
 	if err != nil {
 		return "", fmt.Errorf("failed to decode response body: %w", err)
 	}
