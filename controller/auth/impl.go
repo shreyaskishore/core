@@ -2,6 +2,7 @@ package auth
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/acm-uiuc/core/context"
 	"github.com/acm-uiuc/core/service"
@@ -54,6 +55,13 @@ func (controller *AuthController) GetToken(ctx *context.Context) error {
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "Failed Token Generation")
 	}
+
+	ctx.SetCookie(&http.Cookie{
+		Name:    "token",
+		Value:   token.Token,
+		Expires: time.Unix(token.Expiration, 0),
+		Path:    "/",
+	})
 
 	return ctx.JSON(http.StatusOK, token)
 }
