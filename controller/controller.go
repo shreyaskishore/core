@@ -148,6 +148,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.Sponsors),
 	)
 
+	controller.GET(
+		"/sigs",
+		Chain(siteController.Sigs),
+	)
+
 	return controller, nil
 }
 

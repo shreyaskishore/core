@@ -1,0 +1,74 @@
+{{define "sigs"}}
+{{template "header" .}}
+
+<div class="main sigs-container row">
+    <div class="row">
+        <h1>Special Interest Groups</h1>
+    </div>
+    <div class="row">
+        <div class="small-12 medium-6 large-6 columns">
+            {{range .SigsColLeft}}
+                  <div class="group-info" >
+                      <h4> {{.Name}} </h4>
+                      <div class="contact-info">
+                          <p>
+                              <span>
+                                  {{.Description}}
+                              </span>
+                              <br/>
+                              <span>
+                                  <b> {{.MeetingTime}} </b> - {{.MeetingLocation}}
+                              </span>
+                              <br/>
+                              <span>
+                                  <i> Chair(s) </i> - <b> {{.Chairs}} </b>
+                              </span>
+                              <br/>
+                              <span>
+                                <a href='{{.Website}}'> {{.Website}} </a>
+                              </span>
+                              <br/>
+                              <span>
+                                <a href='mailto:' + {{.Email}}> {{.Email}} </a>
+                              </span>
+                          </p>
+                    </div>
+                </div>
+            {{end}}
+        </div>
+         <div class="small-12 medium-6 large-6 columns">
+            {{range .SigsColRight}}
+                <div class="group-info" >
+                    <h4> {{.Name}} </h4>
+                    <div class="contact-info">
+                        <p>
+                            <span>
+                                {{.Description}}
+                            </span>
+                            <br/>
+                            <span>
+                                <b> {{.MeetingTime}} </b> - {{.MeetingLocation}}
+                            </span>
+                            <br/>
+                            <span>
+                                <i> Chair(s) </i> - <b> {{.Chairs}} </b>
+                            </span>
+                            <br/>
+                            <span>
+                                <a href='{{.Website}}'> {{.Website}} </a>
+                            </span>
+                            <br/>
+                            <span>
+                                <a href='mailto:' + {{.Email}}> {{.Email}} </a>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            {{end}}
+        </div>
+    </div>				
+</div>
+
+
+{{template "footer" .}}
+{{end}}

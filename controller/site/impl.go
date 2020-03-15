@@ -239,3 +239,30 @@ func (controller *SiteController) Sponsors(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "sponsors", params)
 }
+
+func (controller *SiteController) Sigs(ctx *context.Context) error {
+	groups, err := controller.svc.Group.GetGroups()
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Groups")
+	}
+
+	sigs, ok := groups[model.GroupSIGs]
+	if !ok {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Sigs")
+	}
+
+	sigsColLeft := sigs[:len(sigs)/2]
+	sigsColRight := sigs[len(sigs)/2:]
+
+	params := struct {
+		Authenticated bool
+		SigsColLeft   []model.Group
+		SigsColRight  []model.Group
+	}{
+		Authenticated: ctx.LoggedIn,
+		SigsColLeft:   sigsColLeft,
+		SigsColRight:  sigsColRight,
+	}
+
+	return ctx.Render(http.StatusOK, "sigs", params)
+}
