@@ -44,7 +44,7 @@
                             <li class="menu-text">
                                 <span id="title">
                                     <a id="nav-home" href="/">
-                                        <img src="/images/acm-logo-flat.svg" class="logo" id="header-logo"/>
+                                        <img src="/static/images/acm-logo-flat.svg" class="logo" id="header-logo"/>
                                         <h3 id="title-text">ACM@UIUC</h3></br>
                                     </a>
                                 </span>
@@ -64,7 +64,7 @@
                             <li class="nav-loc">
                                 <a href="/sponsors">Sponsors</a>
                             </li>
-                            {{if .Authenticated}}
+                            {{if not .Authenticated}}
                             <li class="nav-loc">
                                 <a href="/join">Join</a>
                             </li>
@@ -78,7 +78,7 @@
                     <div class="top-bar-right">
                         <div class="top-bar-right">
                             <ul class="dropdown menu">
-                                {{if .Authenticated}}
+                                {{if not .Authenticated}}
                                 <li>
                                     <a id="nav-login" href="/login">
                                         <button id="login" class="button">Login</button>
@@ -98,7 +98,7 @@
                 <div class="mobile">
                     <div class="top-bar-left mobile-left">
                         <ul data-dropdown-menu="data-dropdown-menu" class="dropdown menu">
-                            <li class="menu-text"><span id="title"><a id="nav-home" href="/"><img src="/images/acm-logo-flat-50years.svg" class="logo"/>
+                            <li class="menu-text"><span id="title"><a id="nav-home" href="/"><img src="/static/images/acm-logo-flat.svg" class="logo"/>
                                 <h3 id="title-text">ACM@UIUC</h3></a></span>
                             </li>
                         </ul>
@@ -107,7 +107,7 @@
                             <ul class="dropdown menu" id="menu-container">
                                 <li>
                                     <button id="menu" class="button">
-                                        <img src="/images/menu.png" />
+                                        <img src="/static/images/menu.png" />
                                     </button>
                                 </li>
                             </ul>
@@ -117,7 +117,7 @@
                     <ul class="side-nav">
                         <li class="nav-loc-side">
                                 <button id="menu-close" class="button">
-                                    <img src="/images/menu.png" />
+                                    <img src="/static/images/menu.png" />
                                 </button>
                         </li>
                         <li class="nav-loc-side">
@@ -135,7 +135,7 @@
                         <li class="nav-loc-side">
                             <a href="/sponsors">Sponsors</a>
                         </li>
-                        {{if .Authenticated}}
+                        {{if not .Authenticated}}
                         <li class="nav-loc-side">
                             <a href="/join">Join</a>
                         </li>
@@ -144,7 +144,7 @@
                             <a href="/intranet">Intranet</a>
                         </li>
                         {{end}}
-                        {{if .Authenticated}}
+                        {{if not .Authenticated}}
                         <li class="nav-loc-side">
                             <a id="nav-login" href="/login">Login</a>
                         </li>
