@@ -46,6 +46,7 @@ Resume {
 	Degree string
 	Seeking string
 	BlobKey string
+	Approved bool
 }
 ```
 
