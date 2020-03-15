@@ -13,6 +13,12 @@ func Context(svc *service.Service) func(echo.HandlerFunc) echo.HandlerFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(ctx echo.Context) error {
 			token := ctx.Request().Header.Get("Authorization")
+			if token == "" {
+				cookie, err := ctx.Cookie("token")
+				if err == nil {
+					token = cookie.Value
+				}
+			}
 
 			username := ""
 			if token != "" {
@@ -26,6 +32,7 @@ func Context(svc *service.Service) func(echo.HandlerFunc) echo.HandlerFunc {
 			extCtx := &context.Context{
 				Context:  ctx,
 				Username: username,
+				LoggedIn: username != "",
 			}
 
 			return next(extCtx)

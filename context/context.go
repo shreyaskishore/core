@@ -7,4 +7,5 @@ import (
 type Context struct {
 	echo.Context
 	Username string
+	LoggedIn bool
 }
