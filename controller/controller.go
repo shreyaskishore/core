@@ -153,6 +153,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.Sigs),
 	)
 
+	controller.GET(
+		"/login",
+		Chain(siteController.Login),
+	)
+
 	return controller, nil
 }
 

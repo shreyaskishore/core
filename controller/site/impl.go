@@ -266,3 +266,13 @@ func (controller *SiteController) Sigs(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "sigs", params)
 }
+
+func (controller *SiteController) Login(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+	}{
+		Authenticated: ctx.LoggedIn,
+	}
+
+	return ctx.Render(http.StatusOK, "login", params)
+}
