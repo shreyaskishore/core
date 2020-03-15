@@ -182,3 +182,50 @@ func (controller *SiteController) ReflectionsProjections(ctx *context.Context) e
 
 	return ctx.Render(http.StatusOK, "reflectionsprojections", params)
 }
+
+func (controller *SiteController) HackIllinois(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+		Editions      []struct {
+			Year int
+			Uri  string
+		}
+	}{
+		Authenticated: ctx.LoggedIn,
+		Editions: []struct {
+			Year int
+			Uri  string
+		}{
+			{
+				Year: 2020,
+				Uri:  "https://2020.hackillinois.org",
+			},
+			{
+				Year: 2019,
+				Uri:  "https://2019.hackillinois.org",
+			},
+			{
+				Year: 2018,
+				Uri:  "https://2018.hackillinois.org",
+			},
+			{
+				Year: 2017,
+				Uri:  "https://2017.hackillinois.org",
+			},
+			{
+				Year: 2016,
+				Uri:  "https://2016.hackillinois.org",
+			},
+			{
+				Year: 2015,
+				Uri:  "https://2015.hackillinois.org",
+			},
+			{
+				Year: 2014,
+				Uri:  "https://2014.hackillinois.org",
+			},
+		},
+	}
+
+	return ctx.Render(http.StatusOK, "hackillinois", params)
+}
