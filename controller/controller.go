@@ -85,11 +85,7 @@ func New(svc *service.Service) (*Controller, error) {
 	)
 	controller.POST(
 		"/api/user",
-		Chain(userController.CreateUser, middleware.AuthorizeMatchAny(
-			controller.svc, middleware.AuthorizeMatchParameters{
-				Marks: model.UserValidMarks,
-			},
-		)),
+		Chain(userController.CreateUser),
 	)
 	controller.GET(
 		"/api/user/filter",

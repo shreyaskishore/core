@@ -35,6 +35,8 @@ func (controller *UserController) CreateUser(ctx *context.Context) error {
 		return ctx.String(http.StatusBadRequest, "Failed Bind")
 	}
 
+	req.Mark = model.UserMarkBasic
+
 	err = controller.svc.User.CreateUser(req)
 	if err != nil {
 		return ctx.String(http.StatusBadRequest, "Failed User Creation")
