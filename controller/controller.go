@@ -15,6 +15,7 @@ import (
 	"github.com/acm-uiuc/core/controller/auth"
 	"github.com/acm-uiuc/core/controller/docs"
 	"github.com/acm-uiuc/core/controller/group"
+	"github.com/acm-uiuc/core/controller/site"
 	"github.com/acm-uiuc/core/controller/user"
 )
 
@@ -42,6 +43,7 @@ func New(svc *service.Service) (*Controller, error) {
 	authController := auth.New(controller.svc)
 	userController := user.New(controller.svc)
 	groupController := group.New(controller.svc)
+	siteController := site.New(controller.svc)
 
 	controller.Use(echoMiddleware.Logger())
 	controller.Use(echoMiddleware.Recover())
@@ -106,6 +108,11 @@ func New(svc *service.Service) (*Controller, error) {
 	controller.POST(
 		"/api/group/verify",
 		Chain(groupController.VerifyMembership),
+	)
+
+	controller.GET(
+		"/",
+		Chain(siteController.Home),
 	)
 
 	return controller, nil
