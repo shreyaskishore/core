@@ -49,3 +49,13 @@ func (controller *SiteController) About(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "about", params)
 }
+
+func (controller *SiteController) History(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+	}{
+		Authenticated: ctx.LoggedIn,
+	}
+
+	return ctx.Render(http.StatusOK, "history", params)
+}

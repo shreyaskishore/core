@@ -128,6 +128,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.About),
 	)
 
+	controller.GET(
+		"/about/history",
+		Chain(siteController.History),
+	)
+
 	return controller, nil
 }
 
