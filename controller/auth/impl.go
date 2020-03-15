@@ -31,9 +31,11 @@ func (controller *AuthController) GetOAuthRedirect(ctx *context.Context) error {
 
 func (controller *AuthController) GetOAuthRedirectLanding(ctx *context.Context) error {
 	params := struct {
-		Provider string
+		Provider      string
+		Authenticated bool
 	}{
-		Provider: "google",
+		Provider:      ctx.Param("provider"),
+		Authenticated: false,
 	}
 
 	return ctx.Render(http.StatusOK, "redirect", params)
@@ -57,11 +59,10 @@ func (controller *AuthController) GetToken(ctx *context.Context) error {
 	}
 
 	ctx.SetCookie(&http.Cookie{
-		Name:     "token",
-		Value:    token.Token,
-		Expires:  time.Unix(token.Expiration, 0),
-		Path:     "/",
-		HttpOnly: true,
+		Name:    "token",
+		Value:   token.Token,
+		Expires: time.Unix(token.Expiration, 0),
+		Path:    "/",
 	})
 
 	return ctx.JSON(http.StatusOK, token)
