@@ -229,3 +229,13 @@ func (controller *SiteController) HackIllinois(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "hackillinois", params)
 }
+
+func (controller *SiteController) Sponsors(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+	}{
+		Authenticated: ctx.LoggedIn,
+	}
+
+	return ctx.Render(http.StatusOK, "sponsors", params)
+}
