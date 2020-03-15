@@ -294,3 +294,13 @@ func (controller *SiteController) Logout(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "logout", params)
 }
+
+func (controller *SiteController) Join(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+	}{
+		Authenticated: ctx.LoggedIn,
+	}
+
+	return ctx.Render(http.StatusOK, "join", params)
+}

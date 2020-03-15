@@ -163,6 +163,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.Logout),
 	)
 
+	controller.GET(
+		"/join",
+		Chain(siteController.Join),
+	)
+
 	return controller, nil
 }
 
