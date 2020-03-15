@@ -1,6 +1,6 @@
 # API
 
-The API provides the minimal core set of functionality needed to ACM@UIUC public facing infrastructure. There are three components to the core functionality: authentication, user management, and group managment. Authentication is provided via oauth by a provider that can verify the user owns the email address of `<netid>@illinois.edu`. User management provides the ability to create an account, update account info, retrieve users, and mark users. Group management provides a read only interface to the truth store which is internally managed with git.
+The API provides the minimal core set of functionality needed to ACM@UIUC public facing infrastructure. There are three components to the core functionality: authentication, user management, group managment, and resume managment. Authentication is provided via oauth by a provider that can verify the user owns the email address of `<netid>@illinois.edu`. User management provides the ability to create an account, update account info, retrieve users, and mark users. Group management provides a read only interface to the truth store which is internally managed with git. Resume management allows students to upload their resumes and recruiters to the retrive all resumes.
 
 ## Routes
 ```
@@ -15,6 +15,9 @@ POST  /api/user/mark
 
 GET   /api/group
 GET   /api/group/verify
+
+POST  /api/resume/upload
+GET   /api/resume/filter
 ```
 
 ## Database Models
@@ -29,10 +32,20 @@ User {
 	Username string
 	FirstName string
 	LastName string
+	Mark string
+}
+
+Resume {
+	Username string
+	FirstName string
+	LastName string
+	Email string
+	GraduationMonth int
 	GraduationYear int
 	Major string
-	Resume string
-	Mark string
+	Degree string
+	Seeking string
+	BlobKey string
 }
 ```
 
@@ -106,7 +119,5 @@ GET  /resumeupload
 				...
 			...
 	site/
-		partial/
-			...
 		...
 ```
