@@ -73,7 +73,7 @@ func (oauth *GoogleOAuth) GetOAuthToken(code string) (string, error) {
 		ClientSecret string `json:"client_secret"`
 		Code         string `json:"code"`
 		RedirectUri  string `json:"redirect_uri"`
-		GrantType    string `json:"authorization_code"`
+		GrantType    string `json:"grant_type"`
 	}{
 		ClientId:     clientId,
 		ClientSecret: clientSecret,
@@ -110,7 +110,7 @@ func (oauth *GoogleOAuth) GetOAuthToken(code string) (string, error) {
 	}
 
 	token := struct {
-		Token string `json:"token"`
+		Token string `json:"access_token"`
 	}{}
 
 	err = json.Unmarshal(respBody, &token)
