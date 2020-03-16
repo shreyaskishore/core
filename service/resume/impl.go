@@ -5,7 +5,9 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
+	"github.com/acm-uiuc/core/config"
 	"github.com/acm-uiuc/core/model"
+	"github.com/acm-uiuc/core/service/resume/provider"
 )
 
 type resumeImpl struct {
@@ -95,6 +97,15 @@ func (service *resumeImpl) getResumes() ([]model.Resume, error) {
 }
 
 func (service *resumeImpl) getSignedUri(blobKey string, method string) (string, error) {
-	// TODO: Implement signed uri
-	return "https://notimplemented.local", nil
+	providerName, err := config.GetConfigValue("STORAGE_PROVIDER")
+	if err != nil {
+		return "", fmt.Errorf("failed to get storage provider name: %w", err)
+	}
+
+	stoageProvider, err := provider.GetProvider(providerName)
+	if err != nil {
+		return "", fmt.Errorf("failed to get storage provider: %w", err)
+	}
+
+	return stoageProvider.GetSignedUri(blobKey, method)
 }
