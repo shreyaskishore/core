@@ -46,7 +46,20 @@
 </div>
 <script>
     function deleteUserAccount(username) {
-        alert("delete user not implemented");
+        fetch("/api/user", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: username,
+            }),
+        }).then(res => {
+            return res.json();
+        }).then(data => {
+            document.getElementById(username + "-mark-btn").style.display = "none"
+            document.getElementById(username + "-mark").hidden = false;
+        })
     }
 </script>
 
