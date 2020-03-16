@@ -72,3 +72,19 @@ func (controller *UserController) MarkUser(ctx *context.Context) error {
 
 	return ctx.JSON(http.StatusOK, struct{}{})
 }
+
+func (controller *UserController) DeleteUser(ctx *context.Context) error {
+	req := model.User{}
+
+	err := ctx.Bind(&req)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Bind")
+	}
+
+	err = controller.svc.User.DeleteUser(req.Username)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed User Deletion")
+	}
+
+	return ctx.JSON(http.StatusOK, struct{}{})
+}

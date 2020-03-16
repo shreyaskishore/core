@@ -106,6 +106,14 @@ func New(svc *service.Service) (*Controller, error) {
 			},
 		)),
 	)
+	controller.DELETE(
+		"/api/user",
+		Chain(userController.DeleteUser, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
 
 	controller.GET(
 		"/api/group",
