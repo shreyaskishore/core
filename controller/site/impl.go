@@ -405,33 +405,33 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 		roles = append(roles, "Top4")
 	}
 
-	cards := []struct{
+	cards := []struct {
 		Title       string
 		Description string
 		Uri         string
 	}{}
 
 	if isTop4 {
-		cards = append(cards, struct{
+		cards = append(cards, struct {
 			Title       string
 			Description string
 			Uri         string
 		}{
-			Title: "User Manager",
+			Title:       "User Manager",
 			Description: "Manage ACM@UIUC's users",
-			Uri: "/intranet/usermanager",
+			Uri:         "/intranet/usermanager",
 		})
 	}
 
 	if isTop4 {
-		cards = append(cards, struct{
+		cards = append(cards, struct {
 			Title       string
 			Description string
 			Uri         string
 		}{
-			Title: "Recruiter Manager",
+			Title:       "Recruiter Manager",
 			Description: "Manage ACM@UIUC's recruiters",
-			Uri: "/intranet/recruitermanager",
+			Uri:         "/intranet/recruitermanager",
 		})
 	}
 
@@ -446,10 +446,27 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 		}
 	}{
 		Authenticated: ctx.LoggedIn,
-		Username: ctx.Username,
-		Roles:    roles,
-		Cards:    cards,
+		Username:      ctx.Username,
+		Roles:         roles,
+		Cards:         cards,
 	}
 
 	return ctx.Render(http.StatusOK, "intranet", params)
+}
+
+func (controller *SiteController) ResumeBook(ctx *context.Context) error {
+	resumes, err := controller.svc.Resume.GetResumes()
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Resumes")
+	}
+
+	params := struct {
+		Authenticated bool
+		Resumes       []model.Resume
+	}{
+		Authenticated: ctx.LoggedIn,
+		Resumes:       resumes,
+	}
+
+	return ctx.Render(http.StatusOK, "resumebook", params)
 }

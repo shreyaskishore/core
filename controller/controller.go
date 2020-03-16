@@ -194,6 +194,16 @@ func New(svc *service.Service) (*Controller, error) {
 	)
 
 	controller.GET(
+		"/resumebook",
+		Chain(siteController.ResumeBook, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Marks:      []string{model.UserMarkRecruiter},
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
+
+	controller.GET(
 		"/intranet",
 		Chain(siteController.Intranet, middleware.AuthorizeMatchAny(
 			controller.svc, middleware.AuthorizeMatchParameters{
