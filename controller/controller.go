@@ -203,6 +203,15 @@ func New(svc *service.Service) (*Controller, error) {
 		)),
 	)
 
+	controller.GET(
+		"/intranet/recruitermanager",
+		Chain(siteController.RecruiterManager, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
+
 	return controller, nil
 }
 

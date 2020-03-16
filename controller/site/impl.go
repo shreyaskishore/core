@@ -351,3 +351,28 @@ func (controller *SiteController) RecruiterCreator(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "recruitercreator", params)
 }
+
+func (controller *SiteController) RecruiterManager(ctx *context.Context) error {
+	users, err := controller.svc.User.GetUsers()
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Users")
+	}
+
+	// TODO: Use filtering on GetUsers() instead once implemented
+	recruiters := []model.User{}
+	for _, user := range users {
+		if user.Mark == model.UserMarkRecruiter {
+			recruiters = append(recruiters, user)
+		}
+	}
+
+	params := struct {
+		Authenticated bool
+		Users         []model.User
+	}{
+		Authenticated: ctx.LoggedIn,
+		Users:         recruiters,
+	}
+
+	return ctx.Render(http.StatusOK, "recruitermanager", params)
+}
