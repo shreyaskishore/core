@@ -470,3 +470,13 @@ func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "resumebook", params)
 }
+
+func (controller *SiteController) NotFound(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+	}{
+		Authenticated: ctx.LoggedIn,
+	}
+
+	return ctx.Render(http.StatusNotFound, "notfound", params)
+}

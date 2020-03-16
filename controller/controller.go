@@ -240,6 +240,11 @@ func New(svc *service.Service) (*Controller, error) {
 		)),
 	)
 
+	controller.GET(
+		"*",
+		Chain(siteController.NotFound),
+	)
+
 	return controller, nil
 }
 
