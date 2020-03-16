@@ -41,7 +41,16 @@ func (service *resumeImpl) GetResumes() ([]model.Resume, error) {
 }
 
 func (service *resumeImpl) validateResume(resume *model.Resume) error {
-	// TODO: Enforce validation on resumes
+	if resume.Approved {
+		return fmt.Errorf("resume should not be approved")
+	}
+
+	if resume.BlobKey != resume.Username {
+		return fmt.Errorf("resume blob key should be the username: %w", resume.BlobKey)
+	}
+
+	// TODO: Enforce more validation on resumes
+
 	return nil
 }
 

@@ -61,7 +61,7 @@ func TestCreateAndGetresumes(t *testing.T) {
 		Degree:          "Masters",
 		Seeking:         "Internship",
 		BlobKey:         "fake2",
-		Approved:        true,
+		Approved:        false,
 	}
 
 	_, err = svc.UploadResume(expectedResumeOne)
