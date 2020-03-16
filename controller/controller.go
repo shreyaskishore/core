@@ -187,7 +187,11 @@ func New(svc *service.Service) (*Controller, error) {
 
 	controller.GET(
 		"/intranet/usermanager",
-		Chain(siteController.UserManager),
+		Chain(siteController.UserManager, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Committees: []string{model.GroupTop4},
+			},
+		)),
 	)
 
 	return controller, nil
