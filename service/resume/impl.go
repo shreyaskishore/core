@@ -89,5 +89,5 @@ func (service *resumeImpl) getResumes() ([]model.Resume, error) {
 
 func (service *resumeImpl) getSignedUri(blob_key string, method string) (string, error) {
 	// TODO: Implement signed uri
-	return "https://not.implemented", nil
+	return "https://notimplemented.local", nil
 }
