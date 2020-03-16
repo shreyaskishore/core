@@ -5,8 +5,9 @@
 	<div id="main-container" class="small-12 medium-12 large-12 columns">
 		<div id="links-top" class="row">
 			<div id="unapproved-users-partial">
+                <h2>Recruiters</h2>
+                <a href="/intranet/recruitercreator"><button class="button">Create Recruiter Account</button></a>
                 {{if not (eq (len .Users) 0)}}
-                    <h2>Recruiters</h2>
                     <table class="table table-striped" id="user-approval-table" class="dynatable-container">
                         <thead>
                             <tr>
