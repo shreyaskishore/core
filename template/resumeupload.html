@@ -1,0 +1,91 @@
+{{define "resumeupload"}}
+{{template "header" .}}
+
+<div id="resume-container">
+    <div class="row">
+        <h2>Resume Upload</h2>
+        <p>
+        The ACM resume book is a packet of resumes provided to interested companies who contact ACM. To be included please fill in the information below. If you have any questions, please do not hesistate to <a href="mailto:corporate@acm.illinois.edu">email us</a>.
+        </p>
+
+        <form ref="uploadForm" id="uploadResume">
+            <div class="field-group required">
+                <label for="first_name" class="field-label">First Name</label>
+                <div class="field">
+                    <input id="first_name" type="text" name="firstName" maxlength="32" />
+                </div>
+            </div>
+            <div class="field-group required">
+                <label for="last_name" class="field-label">Last Name</label>
+                <div class="field">
+                    <input id="last_name" type="text" name="lastName" maxlength="32" />
+                </div>
+            </div>
+            <div class="field-group required">
+                <label for="netid" class="field-label">NetID</label>
+                <div class="field">
+                    <input id="netid" type="text" name="netid" maxlength="15" />
+                </div>
+            </div>
+            <div class="field-group required">
+                <label for="email" class="field-label">Preferred Email</label>
+                <div class="field">
+                    <input id="email" type="text" name="email" />
+                </div>
+            </div>
+            <div class="field-group required">
+                <label for="major" class="field-label">Major</label>
+                <select id="major" name="major">
+                    {{range .Majors}}
+                        <option value='{{.}}'>{{.}}</option>
+                    {{end}}
+                </select>
+            </div>
+            <div class="field-group required">
+                <label for="graduation_month" class="field-label">Graduation Month</label>
+                <select id="graduation_month" name="graduation_month">
+                    {{range .GraduationMonths}}
+                        <option value='{{.}}'>{{.}}</option>
+                    {{end}}
+                </select>
+            </div>
+            <div class="field-group required">
+                <label for="graduation_year" class="field-label">Graduation Year</label>
+                <select id="graduation_year" name="graduation_year">
+                    {{range .GraduationYears}}
+                        <option value='{{.}}'>{{.}}</option>
+                    {{end}}
+                </select>
+            </div>
+            <div class="field-group required">
+                <label for="degree" class="field-label">Degree</label>
+                <select id="degree" name="degree">
+                    {{range .Degrees}}
+                        <option value='{{.}}'>{{.}}</option>
+                    {{end}}
+                </select>
+            </div>
+            <div class="field-group required">
+                <label for="seeking" class="field-label">Seeking</label>
+                <select id="seeking" name="seeking">
+                    {{range .Seekings}}
+                        <option value='{{.}}'>{{.}}</option>
+                    {{end}}
+                </select>
+            </div>
+            <div class="field-group required">
+                <label for="resume" class="field-label">Resume</label>
+                <input id="resume" type="file" file-model="resume" name="resume" class="upload" />
+            </div><br/>
+            <div class="control-group">
+                <p>By submitting this form you verify that all the information above is correct and give ACM@UIUC permission to distribute your resume to all interested parties.</p>
+                <div class="controls">
+                    <button type="button" class="button">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{template "footer" .}}
+{{end}}

@@ -304,3 +304,23 @@ func (controller *SiteController) Join(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "join", params)
 }
+
+func (controller *SiteController) ResumeUpload(ctx *context.Context) error {
+	params := struct {
+		Authenticated    bool
+		GraduationMonths []int
+		GraduationYears  []int
+		Degrees          []string
+		Seekings         []string
+		Majors           []string
+	}{
+		Authenticated:    ctx.LoggedIn,
+		GraduationMonths: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
+		GraduationYears:  []int{2020, 2021, 2022, 2023, 2024, 2025},
+		Degrees:          []string{"Bachlors", "Masters", "PhD"},
+		Seekings:         []string{"Internship", "Co Op", "Full Time"},
+		Majors:           []string{"Computer Science", "Computer Engineering", "Electrical Enginering", "Mathematics", "Other Engineering", "Other Sciences", "Other"},
+	}
+
+	return ctx.Render(http.StatusOK, "resumeupload", params)
+}

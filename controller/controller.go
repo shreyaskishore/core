@@ -180,6 +180,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.Join),
 	)
 
+	controller.GET(
+		"/resumeupload",
+		Chain(siteController.ResumeUpload),
+	)
+
 	return controller, nil
 }
 
