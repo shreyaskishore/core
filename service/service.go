@@ -5,13 +5,15 @@ import (
 
 	"github.com/acm-uiuc/core/service/auth"
 	"github.com/acm-uiuc/core/service/group"
+	"github.com/acm-uiuc/core/service/resume"
 	"github.com/acm-uiuc/core/service/user"
 )
 
 type Service struct {
-	Auth  auth.AuthService
-	User  user.UserService
-	Group group.GroupService
+	Auth   auth.AuthService
+	User   user.UserService
+	Group  group.GroupService
+	Resume resume.ResumeService
 }
 
 func New() (*Service, error) {
@@ -30,9 +32,15 @@ func New() (*Service, error) {
 		return nil, fmt.Errorf("failed to create group service: %w", err)
 	}
 
+	resumeService, err := resume.New()
+	if err != nil {
+		return nil, fmt.Errorf("failed to create resume service: %w", err)
+	}
+
 	return &Service{
-		Auth:  authService,
-		User:  userService,
-		Group: groupService,
+		Auth:   authService,
+		User:   userService,
+		Group:  groupService,
+		Resume: resumeService,
 	}, nil
 }
