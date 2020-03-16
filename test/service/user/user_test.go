@@ -156,3 +156,46 @@ func TestCreateAndMarkAndGetUser(t *testing.T) {
 		t.Fatalf("expected '%+v', got '%+v'", &expectedUser, user)
 	}
 }
+
+func TestCreateAndGetAndRemoveAndGetUser(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := user.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedUser := model.User{
+		Username:  "fake",
+		FirstName: "fake",
+		LastName:  "fake",
+		Mark:      model.UserMarkBasic,
+	}
+
+	err = svc.CreateUser(expectedUser)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	user, err := svc.GetUser(expectedUser.Username)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !reflect.DeepEqual(&expectedUser, user) {
+		t.Fatalf("expected '%+v', got '%+v'", &expectedUser, user)
+	}
+
+	err = svc.DeleteUser(expectedUser.Username)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = svc.GetUser(expectedUser.Username)
+	if err == nil {
+		t.Fatal("expected no user")
+	}
+}

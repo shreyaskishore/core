@@ -18,6 +18,10 @@ func (service *userImpl) GetUser(username string) (*model.User, error) {
 		return nil, fmt.Errorf("failed to get info: %w", err)
 	}
 
+	if user.Username == "" {
+		return nil, fmt.Errorf("failed to get info: %s", username)
+	}
+
 	return user, nil
 }
 
@@ -58,9 +62,22 @@ func (service *userImpl) MarkUser(username string, mark string) error {
 	return nil
 }
 
+func (service *userImpl) DeleteUser(username string) error {
+	err := service.removeUser(username)
+	if err != nil {
+		return fmt.Errorf("failed to create user: %w", err)
+	}
+
+	return nil
+}
+
 func (service *userImpl) validateUser(user *model.User) error {
 	if user.Mark != model.UserMarkBasic {
 		return fmt.Errorf("invalid user mark: %s", user.Mark)
+	}
+
+	if user.Username == "" {
+		return fmt.Errorf("invalid username: %s", user.Username)
 	}
 
 	// TODO: Implement further user data validate
@@ -72,6 +89,19 @@ func (service *userImpl) addUser(user *model.User) error {
 	_, err := service.db.NamedExec("INSERT INTO users (username, first_name, last_name, mark) VALUES (:username, :first_name, :last_name, :mark)", user)
 	if err != nil {
 		fmt.Errorf("failed to add user to database: %w", err)
+	}
+
+	return nil
+}
+
+func (service *userImpl) removeUser(username string) error {
+	user := &model.User{
+		Username: username,
+	}
+
+	_, err := service.db.NamedExec("DELETE FROM users WHERE username = :username", user)
+	if err != nil {
+		fmt.Errorf("failed to remove user from database: %w", err)
 	}
 
 	return nil

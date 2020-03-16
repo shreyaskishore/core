@@ -12,6 +12,7 @@ type UserService interface {
 	CreateUser(user model.User) error
 	GetUsers() ([]model.User, error)
 	MarkUser(username string, mark string) error
+	DeleteUser(username string) error
 }
 
 func New() (UserService, error) {
