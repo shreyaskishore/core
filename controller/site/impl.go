@@ -378,6 +378,33 @@ func (controller *SiteController) RecruiterManager(ctx *context.Context) error {
 }
 
 func (controller *SiteController) Intranet(ctx *context.Context) error {
+	roles := []string{}
+
+	marksToRole := map[string]string{
+		model.UserMarkBasic:     "Basic Member",
+		model.UserMarkPaid:      "Paid Member",
+		model.UserMarkRecruiter: "Recruiter",
+	}
+
+	user, err := controller.svc.User.GetUser(ctx.Username)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Getting User")
+	}
+
+	markRole, ok := marksToRole[user.Mark]
+	if !ok {
+		return ctx.String(http.StatusBadRequest, "Invalid User Mark")
+	}
+	roles = append(roles, markRole)
+
+	isTop4, err := controller.svc.Group.VerifyMembership(ctx.Username, model.GroupCommittees, model.GroupTop4)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Membership Verification")
+	}
+	if isTop4 {
+		roles = append(roles, "Top4")
+	}
+
 	params := struct {
 		Authenticated bool
 		Username      string
@@ -390,7 +417,7 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 	}{
 		Authenticated: ctx.LoggedIn,
 		Username:      ctx.Username,
-		Roles:         []string{},
+		Roles:         roles,
 		Cards: []struct {
 			Title       string
 			Description string

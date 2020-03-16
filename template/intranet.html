@@ -8,7 +8,7 @@
                 <h3>Your information</h3>
 
                 <h5>Hello, {{.Username}}</p>
-                <h6>Role(s): {{.Roles}}</h6>
+                <h6>Role(s): |{{range .Roles}} {{.}} |{{end}}</h6>
             </div>
         </div>
         <div class="intranet-card-container">
