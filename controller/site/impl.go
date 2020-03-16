@@ -341,3 +341,13 @@ func (controller *SiteController) UserManager(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "usermanager", params)
 }
+
+func (controller *SiteController) RecruiterCreator(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+	}{
+		Authenticated: ctx.LoggedIn,
+	}
+
+	return ctx.Render(http.StatusOK, "recruitercreator", params)
+}
