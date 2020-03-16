@@ -324,3 +324,15 @@ func (controller *SiteController) ResumeUpload(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "resumeupload", params)
 }
+
+func (controller *SiteController) UserManager(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+		Users         []model.User
+	}{
+		Authenticated: ctx.LoggedIn,
+		Users:         []model.User{},
+	}
+
+	return ctx.Render(http.StatusOK, "usermanager", params)
+}

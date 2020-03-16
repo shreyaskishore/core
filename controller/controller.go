@@ -185,6 +185,11 @@ func New(svc *service.Service) (*Controller, error) {
 		Chain(siteController.ResumeUpload),
 	)
 
+	controller.GET(
+		"/intranet/usermanager",
+		Chain(siteController.UserManager),
+	)
+
 	return controller, nil
 }
 
