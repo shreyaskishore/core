@@ -8,7 +8,7 @@
         The ACM resume book is a packet of resumes provided to interested companies who contact ACM. To be included please fill in the information below. If you have any questions, please do not hesistate to <a href="mailto:corporate@acm.illinois.edu">email us</a>.
         </p>
 
-        <form ref="uploadForm" id="uploadResume">
+        <form id="uploadResume" onsubmit="submitResumeUpload(event)">
             <div class="field-group required">
                 <label for="first_name" class="field-label">First Name</label>
                 <div class="field">
@@ -80,12 +80,41 @@
             <div class="control-group">
                 <p>By submitting this form you verify that all the information above is correct and give ACM@UIUC permission to distribute your resume to all interested parties.</p>
                 <div class="controls">
-                    <button type="button" class="button">Submit</button>
+                    <button type="submit" class="button">Submit</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<script>
+    function submitResumeUpload(event) {
+        event.preventDefault();
+
+        data = {
+            username: document.getElementById("netid").value,
+            first_name: document.getElementById("first_name").value,
+            last_name: document.getElementById("last_name").value,
+            email: document.getElementById("email").value,
+            graduation_month: parseInt(document.getElementById("graduation_month").value),
+            graduation_year: parseInt(document.getElementById("graduation_year").value),
+            degree: document.getElementById("degree").value,
+            seeking: document.getElementById("seeking").value,
+        };
+
+        fetch("/api/resume", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        }).then(res => {
+            return res.json();
+        }).then(data => {
+            console.log(data);
+            window.location.replace("/");
+        });
+    }
+</script>
 
 {{template "footer" .}}
 {{end}}
