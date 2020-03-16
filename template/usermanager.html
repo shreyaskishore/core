@@ -22,7 +22,8 @@
                                 <tr>
                                     <td>
                                         {{if eq .Mark "BASIC"}}
-                                            <a class="button" onClick="markUserAsPaid({{.Username}})">Mark Paid</a>
+                                            <button id="{{.Username}}-mark-btn" type="button" class="button" onClick="markUserAsPaid({{.Username}})">Mark Paid</button>
+                                            <p id="{{.Username}}-mark" hidden>PAID</p>
                                         {{else}}
                                             <p>{{.Mark}}</p>
                                         {{end}}
@@ -42,6 +43,25 @@
 		</div>
 	</div>
 </div>
+<script>
+    function markUserAsPaid(username) {
+        fetch("/api/user/mark", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: username,
+                mark: "PAID",
+            }),
+        }).then(res => {
+            return res.json();
+        }).then(data => {
+            document.getElementById(username + "-mark-btn").style.display = "none"
+        document.getElementById(username + "-mark").hidden = false;
+        })
+    }
+</script>
 
 {{template "footer" .}}
 {{end}}
