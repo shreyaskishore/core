@@ -326,12 +326,17 @@ func (controller *SiteController) ResumeUpload(ctx *context.Context) error {
 }
 
 func (controller *SiteController) UserManager(ctx *context.Context) error {
+	users, err := controller.svc.User.GetUsers()
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Users")
+	}
+
 	params := struct {
 		Authenticated bool
 		Users         []model.User
 	}{
 		Authenticated: ctx.LoggedIn,
-		Users:         []model.User{},
+		Users:         users,
 	}
 
 	return ctx.Render(http.StatusOK, "usermanager", params)
