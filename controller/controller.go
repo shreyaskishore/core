@@ -194,6 +194,16 @@ func New(svc *service.Service) (*Controller, error) {
 	)
 
 	controller.GET(
+		"/intranet",
+		Chain(siteController.Intranet, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Marks:      []string{model.UserMarkPaid},
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
+
+	controller.GET(
 		"/intranet/usermanager",
 		Chain(siteController.UserManager, middleware.AuthorizeMatchAny(
 			controller.svc, middleware.AuthorizeMatchParameters{

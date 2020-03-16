@@ -1,0 +1,66 @@
+{{define "intranet"}}
+{{template "header" .}}
+
+<div id="home-container" class="row">
+    <div id="main-container" class="small-12 medium-9 large-9 columns">
+        <div id="links-top" class="row">
+            <div id="main-left" class="small-12 medium-12 large-12 columns">
+                <h3>Your information</h3>
+
+                <h5>Hello, {{.Username}}</p>
+                <h6>Role(s): {{.Roles}}</h6>
+            </div>
+        </div>
+        <div class="intranet-card-container">
+            {{range .Cards}}
+                <div class="intranet-card card">
+                    <h3>{{.Title}}</h3>
+                    <p>{{.Description}}</p>
+                    <a href="{{.Uri}}"><button class="button">Go</button></a>
+                </div>
+            {{end}}
+        </div>
+    </div>
+
+    <div id="events-container" class="small-12 medium-12 large-3 columns">
+        <div id="events-title" class="row">
+        <h2>Links</h2>
+        </div>
+        <div id="events" class="row">
+        <div class="event">
+            <div class="event">
+            <ul class="dashed">
+                <li><a href="https://www-s.acm.illinois.edu/mailman/listinfo">Mailing Lists </a></li>
+            </ul>
+            </div>
+        </div>
+        </div>
+        <div id="events-title" class="row">
+        <h2>Groups</h2>
+        </div>
+        <div id="events" class="row">
+        <div class="event">
+            <div class="event">
+            <ul class="dashed">
+                <li><a href="https://acm-uiuc.slack.com">ACM Slack</a></li>
+            </ul>
+            </div>
+            <div class="event">
+            <ul class="dashed">
+                <li><a href="https://github.com/acm-uiuc">ACM Github</a></li>
+            </ul>
+            </div>
+            <div class="event">
+            <ul class="dashed">
+                <li><a href="https://www.facebook.com/groups/uiucacm/">ACM FB Group</a></li>
+            </ul>
+            </div>
+        </div>
+        </div>
+    </div>
+  </div>
+  <div class="footer_padding">
+  </div>
+
+  {{template "footer" .}}
+  {{end}}

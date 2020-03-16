@@ -376,3 +376,27 @@ func (controller *SiteController) RecruiterManager(ctx *context.Context) error {
 
 	return ctx.Render(http.StatusOK, "recruitermanager", params)
 }
+
+func (controller *SiteController) Intranet(ctx *context.Context) error {
+	params := struct {
+		Authenticated bool
+		Username      string
+		Roles         []string
+		Cards         []struct {
+			Title       string
+			Description string
+			Uri         string
+		}
+	}{
+		Authenticated: ctx.LoggedIn,
+		Username:      ctx.Username,
+		Roles:         []string{},
+		Cards: []struct {
+			Title       string
+			Description string
+			Uri         string
+		}{},
+	}
+
+	return ctx.Render(http.StatusOK, "intranet", params)
+}
