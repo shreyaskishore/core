@@ -87,6 +87,12 @@
     </div>
 </div>
 <script>
+    document.getElementById("major").value = "{{index .Majors 0}}";
+    document.getElementById("graduation_month").value = "{{index .GraduationMonths 4}}";
+    document.getElementById("graduation_year").value = "{{index .GraduationYears 0}}";
+    document.getElementById("degree").value = "{{index .Degrees 0}}";
+    document.getElementById("seeking").value = "{{index .Seekings 0}}";
+
     function submitResumeUpload(event) {
         event.preventDefault();
 
@@ -95,6 +101,7 @@
             first_name: document.getElementById("first_name").value,
             last_name: document.getElementById("last_name").value,
             email: document.getElementById("email").value,
+            major: document.getElementById("major").value,
             graduation_month: parseInt(document.getElementById("graduation_month").value),
             graduation_year: parseInt(document.getElementById("graduation_year").value),
             degree: document.getElementById("degree").value,
