@@ -16,6 +16,7 @@ import (
 	"github.com/acm-uiuc/core/controller/auth"
 	"github.com/acm-uiuc/core/controller/docs"
 	"github.com/acm-uiuc/core/controller/group"
+	"github.com/acm-uiuc/core/controller/resume"
 	"github.com/acm-uiuc/core/controller/site"
 	"github.com/acm-uiuc/core/controller/user"
 )
@@ -44,6 +45,7 @@ func New(svc *service.Service) (*Controller, error) {
 	authController := auth.New(controller.svc)
 	userController := user.New(controller.svc)
 	groupController := group.New(controller.svc)
+	resumeController := resume.New(controller.svc)
 	siteController := site.New(controller.svc)
 
 	staticBase, err := config.GetConfigValue("STATIC_BASE")
@@ -112,6 +114,20 @@ func New(svc *service.Service) (*Controller, error) {
 	controller.POST(
 		"/api/group/verify",
 		Chain(groupController.VerifyMembership),
+	)
+
+	controller.POST(
+		"/api/resume",
+		Chain(resumeController.UploadResume),
+	)
+	controller.GET(
+		"/api/resume/filter",
+		Chain(resumeController.GetResumes, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Marks:      []string{model.UserMarkRecruiter},
+				Committees: []string{model.GroupTop4},
+			},
+		)),
 	)
 
 	controller.GET(
