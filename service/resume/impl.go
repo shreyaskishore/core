@@ -76,6 +76,13 @@ func (service *resumeImpl) getResumes() ([]model.Resume, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to decode row from database: %w", err)
 		}
+
+		uri, err := service.getSignedUri(result.BlobKey, "GET")
+		if err != nil {
+			return nil, fmt.Errorf("failed to generate signed uri for resume: %w", err)
+		}
+		result.BlobKey = uri
+
 		results = append(results, result)
 	}
 
@@ -87,7 +94,7 @@ func (service *resumeImpl) getResumes() ([]model.Resume, error) {
 	return results, nil
 }
 
-func (service *resumeImpl) getSignedUri(blob_key string, method string) (string, error) {
+func (service *resumeImpl) getSignedUri(blobKey string, method string) (string, error) {
 	// TODO: Implement signed uri
 	return "https://notimplemented.local", nil
 }
