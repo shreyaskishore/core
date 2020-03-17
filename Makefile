@@ -33,4 +33,4 @@ run:
 # Formats the repo's golang files
 .PHONY: fmt
 fmt:
-	@gofmt -s -w -l .
+	@go fmt $(BASE_PACKAGE)/...
