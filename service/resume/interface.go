@@ -10,6 +10,7 @@ import (
 type ResumeService interface {
 	UploadResume(resume model.Resume) (string, error)
 	GetResumes() ([]model.Resume, error)
+	ApproveResume(username string) error
 }
 
 func New() (ResumeService, error) {

@@ -42,6 +42,15 @@ func (service *resumeImpl) GetResumes() ([]model.Resume, error) {
 	return resumes, nil
 }
 
+func (service *resumeImpl) ApproveResume(username string) error {
+	err := service.markApproved(username)
+	if err != nil {
+		return fmt.Errorf("failed to approve resume: %w", err)
+	}
+
+	return nil
+}
+
 func (service *resumeImpl) validateResume(resume *model.Resume) error {
 	if resume.Approved {
 		return fmt.Errorf("resume should not be approved")
@@ -108,4 +117,18 @@ func (service *resumeImpl) getSignedUri(blobKey string, method string) (string, 
 	}
 
 	return stoageProvider.GetSignedUri(blobKey, method)
+}
+
+func (service *resumeImpl) markApproved(username string) error {
+	resume := &model.Resume{
+		Username: username,
+		Approved: true,
+	}
+
+	_, err := service.db.NamedExec("UPDATE resumes SET approved=:approved WHERE username=:username", resume)
+	if err != nil {
+		return fmt.Errorf("failed to update resume: %w", err)
+	}
+
+	return nil
 }
