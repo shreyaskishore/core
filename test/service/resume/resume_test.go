@@ -91,3 +91,56 @@ func TestCreateAndGetresumes(t *testing.T) {
 		t.Fatalf("expected '%+v' and '%+v', got '%+v' and '%+v'", expectedResumeOne, expectedResumeTwo, resumes[0], resumes[1])
 	}
 }
+
+func TestCreateAndApproveAndGetresume(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := resume.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedResumeOne := model.Resume{
+		Username:        "fake1",
+		FirstName:       "fake1",
+		LastName:        "fake1",
+		Email:           "fake1@illinois.edu",
+		GraduationMonth: 5,
+		GraduationYear:  2021,
+		Major:           "Computer Science",
+		Degree:          "Bachlors",
+		Seeking:         "Full Time",
+		BlobKey:         "fake1",
+		Approved:        false,
+	}
+
+	_, err = svc.UploadResume(expectedResumeOne)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = svc.ApproveResume(expectedResumeOne.Username)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resumes, err := svc.GetResumes()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedCount := 1
+	if len(resumes) != expectedCount {
+		t.Fatalf("expected '%d', got '%d'", expectedCount, len(resumes))
+	}
+
+	expectedResumeOne.Approved = true
+	expectedResumeOne.BlobKey = "http://fakestorage.local"
+
+	if !reflect.DeepEqual(expectedResumeOne, resumes[0]) {
+		t.Fatalf("expected '%+v', got '%+v'", expectedResumeOne, resumes[0])
+	}
+}
