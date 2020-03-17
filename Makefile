@@ -34,3 +34,8 @@ run:
 .PHONY: fmt
 fmt:
 	@go fmt $(BASE_PACKAGE)/...
+
+# Builds the production container
+.PHONY: container
+container:
+	@docker build -t core:prod $(REPO_ROOT)
