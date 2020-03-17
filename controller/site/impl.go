@@ -435,6 +435,18 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 		})
 	}
 
+	if isTop4 {
+		cards = append(cards, struct {
+			Title       string
+			Description string
+			Uri         string
+		}{
+			Title:       "Resume Manager",
+			Description: "Manage ACM@UIUC's resumes",
+			Uri:         "/intranet/resumemanager",
+		})
+	}
+
 	params := struct {
 		Authenticated bool
 		Username      string
