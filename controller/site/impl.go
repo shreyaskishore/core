@@ -472,12 +472,20 @@ func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 		return ctx.String(http.StatusBadRequest, "Failed Getting Resumes")
 	}
 
+	// TODO: Use filtering on GetResumes() instead once implemented
+	approvedResumes := []model.Resume{}
+	for _, resume := range resumes {
+		if resume.Approved {
+			approvedResumes = append(approvedResumes, resume)
+		}
+	}
+
 	params := struct {
 		Authenticated bool
 		Resumes       []model.Resume
 	}{
 		Authenticated: ctx.LoggedIn,
-		Resumes:       resumes,
+		Resumes:       approvedResumes,
 	}
 
 	return ctx.Render(http.StatusOK, "resumebook", params)
