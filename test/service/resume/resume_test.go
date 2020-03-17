@@ -84,6 +84,9 @@ func TestCreateAndGetresumes(t *testing.T) {
 		t.Fatalf("expected '%d', got '%d'", expectedCount, len(resumes))
 	}
 
+	expectedResumeOne.BlobKey = "http://fakestorage.local"
+	expectedResumeTwo.BlobKey = "http://fakestorage.local"
+
 	if !((reflect.DeepEqual(expectedResumeOne, resumes[0]) && reflect.DeepEqual(expectedResumeTwo, resumes[1])) || (reflect.DeepEqual(expectedResumeOne, resumes[1]) && reflect.DeepEqual(expectedResumeTwo, resumes[0]))) {
 		t.Fatalf("expected '%+v' and '%+v', got '%+v' and '%+v'", expectedResumeOne, expectedResumeTwo, resumes[0], resumes[1])
 	}
