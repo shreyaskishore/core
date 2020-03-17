@@ -137,6 +137,14 @@ func New(svc *service.Service) (*Controller, error) {
 			},
 		)),
 	)
+	controller.GET(
+		"/api/resume/approve",
+		Chain(resumeController.ApproveResume, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
 
 	controller.GET(
 		"/",

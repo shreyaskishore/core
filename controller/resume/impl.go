@@ -49,3 +49,19 @@ func (controller *ResumeController) GetResumes(ctx *context.Context) error {
 
 	return ctx.JSON(http.StatusOK, resumes)
 }
+
+func (controller *ResumeController) ApproveResume(ctx *context.Context) error {
+	req := model.Resume{}
+
+	err := ctx.Bind(&req)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Bind")
+	}
+
+	err = controller.svc.Resume.ApproveResume(req.Username)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Resume Approval")
+	}
+
+	return ctx.JSON(http.StatusOK, struct{}{})
+}
