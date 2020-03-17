@@ -123,13 +123,13 @@
             }
 
             fetch(data.upload_uri, {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/pdf",
                 },
                 body: document.getElementById("resume").files[0],
             }).then(res => {
-                return res.json();
+                return res.text();
             }).then(data => {
                 window.location.replace("/");
             });
