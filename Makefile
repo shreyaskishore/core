@@ -17,6 +17,12 @@ core:
 	@go build -o $(REPO_ROOT)/bin/core $(BASE_PACKAGE)
 	@echo 'Finished'
 
+# Runs all migration
+.PHONY: test-migration
+test-migration:
+	@echo 'Migrating ACM@UIUC Core Test Database'
+	@IS_TEST=true DB_NAME=core-test $(REPO_ROOT)/bin/core -migration all
+
 # Runs all tests
 .PHONY: test
 test:
