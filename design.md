@@ -18,6 +18,7 @@ GET   /api/group/verify
 
 POST  /api/resume/upload
 GET   /api/resume/filter
+POST  /api/resume/approve
 ```
 
 ## Database Models
@@ -77,14 +78,21 @@ GroupMember {
 ```
 GET  /
 GET  /about
+GET  /about/history
 GET  /sigs
-GET  /conference
+GET  /reflectionsprojections
 GET  /hackathon
 GET  /sponsors
 GET  /join
-GET  /intranet
+GET  /login
+GET  /logout
 GET  /resumebook
 GET  /resumeupload
+GET  /intranet
+GET  /intranet/resumemanager
+GET  /intranet/usermanager
+GET  /intranet/recruitermanager
+GET  /intranet/recruitercreator
 ```
 
 # Codebase
@@ -92,9 +100,37 @@ GET  /resumeupload
 ## Layout
 ```
 /
-	api/
-		model/
+	model/
+		...
+	service/
+		auth/
 			...
+		user/
+			...
+		group/
+			...
+		resume/
+			...
+		...
+	controller/
+		auth/
+			...
+		user/
+			...
+		group/
+			...
+		...
+	middleware/
+		....
+	server/
+		...
+	template/
+		...
+	database/
+		migrations/
+			...
+		...
+	test/
 		service/
 			auth/
 				...
@@ -102,23 +138,11 @@ GET  /resumeupload
 				...
 			group/
 				...
-			...
-		controller/
-			auth/
+			resume/
 				...
-			user/
-				...
-			group/
-				...
+	static/
+		images/
 			...
-		middleware/
-			....
-		server/
+		less/
 			...
-		database/
-			migrations/
-				...
-			...
-	site/
-		...
 ```
