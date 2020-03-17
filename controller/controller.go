@@ -137,7 +137,7 @@ func New(svc *service.Service) (*Controller, error) {
 			},
 		)),
 	)
-	controller.GET(
+	controller.POST(
 		"/api/resume/approve",
 		Chain(resumeController.ApproveResume, middleware.AuthorizeMatchAny(
 			controller.svc, middleware.AuthorizeMatchParameters{
@@ -242,6 +242,15 @@ func New(svc *service.Service) (*Controller, error) {
 	controller.GET(
 		"/intranet/recruitermanager",
 		Chain(siteController.RecruiterManager, middleware.AuthorizeMatchAny(
+			controller.svc, middleware.AuthorizeMatchParameters{
+				Committees: []string{model.GroupTop4},
+			},
+		)),
+	)
+
+	controller.GET(
+		"/intranet/resumemanager",
+		Chain(siteController.ResumeManager, middleware.AuthorizeMatchAny(
 			controller.svc, middleware.AuthorizeMatchParameters{
 				Committees: []string{model.GroupTop4},
 			},

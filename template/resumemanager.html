@@ -1,0 +1,64 @@
+{{define "resumemanager"}}
+{{template "header" .}}
+
+<div id="home-container" class="row">
+	<div id="main-container" class="small-12 medium-12 large-12 columns">
+		<div id="links-top" class="row">
+			<div id="unapproved-users-partial">
+                <h2>Resumes</h2>
+                <table id="resume-table" class="dynatable-container">
+                    <thead>
+                        <tr>
+                            <th>Action </th>
+                            <th>Name </th>
+                            <th>NetID </th>
+                            <th>Graduation </th>
+                            <th>Level </th>
+                            <th>Seeking </th>
+                            <th>Resume </th>
+                        </tr>
+                    </thead>
+                    {{range .Resumes}}
+                        <tr>
+                            <td>
+                                {{if not .Approved}}
+                                    <button id="{{.Username}}-mark-btn" type="button" class="button" onClick="approveResume({{.Username}})">Approve</button>
+                                    <p id="{{.Username}}-mark" hidden>APPROVED</p>
+                                {{else}}
+                                    <p>APPROVED</p>
+                                {{end}}
+                            </td>
+                            <td>{{.FirstName}} {{.LastName}}</td>
+                            <td>{{.Username}}</td>
+                            <td>{{.GraduationMonth}} / {{.GraduationYear}}</td>
+                            <td>{{.Degree}}</td>
+                            <td>{{.Seeking}}</td>
+                            <td><a href="{{.BlobKey}}" target="_blank">View Resume</a></td>
+                        </tr>
+                    {{end}}
+                </table>
+			 </div>
+		</div>
+	</div>
+</div>
+<script>
+    function approveResume(username) {
+        fetch("/api/resume/approve", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: username,
+            }),
+        }).then(res => {
+            return res.json();
+        }).then(data => {
+            document.getElementById(username + "-mark-btn").style.display = "none"
+            document.getElementById(username + "-mark").hidden = false;
+        })
+    }
+</script>
+
+{{template "footer" .}}
+{{end}}

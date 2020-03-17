@@ -471,6 +471,23 @@ func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 	return ctx.Render(http.StatusOK, "resumebook", params)
 }
 
+func (controller *SiteController) ResumeManager(ctx *context.Context) error {
+	resumes, err := controller.svc.Resume.GetResumes()
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, "Failed Getting Resumes")
+	}
+
+	params := struct {
+		Authenticated bool
+		Resumes       []model.Resume
+	}{
+		Authenticated: ctx.LoggedIn,
+		Resumes:       resumes,
+	}
+
+	return ctx.Render(http.StatusOK, "resumemanager", params)
+}
+
 func (controller *SiteController) NotFound(ctx *context.Context) error {
 	params := struct {
 		Authenticated bool
