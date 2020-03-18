@@ -19,7 +19,7 @@ func TestGetGroups(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	expectedGroupTypeCount := 1
+	expectedGroupTypeCount := 2
 	if len(groups) != expectedGroupTypeCount {
 		t.Fatalf("expected '%d', got '%d'", expectedGroupTypeCount, len(groups))
 	}
@@ -29,15 +29,11 @@ func TestGetGroups(t *testing.T) {
 		t.Fatalf("couldn't find group type: %s", model.GroupCommittees)
 	}
 
-	expectedCommitteeCount := 2
-	if len(committees) != expectedCommitteeCount {
-		t.Fatalf("expected '%d', got '%d'", expectedCommitteeCount, len(committees))
-	}
-
 	expected := model.Group{
 		Name:        "Top4",
 		Description: "The leadership team for ACM",
 		Chairs:      "Arnav Sankaran",
+		Email:       "acm@illinois.edu",
 		Members: []model.GroupMember{
 			model.GroupMember{
 				Role:        "Chair",
