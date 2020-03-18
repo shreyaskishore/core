@@ -29,7 +29,7 @@ func TestGetGroups(t *testing.T) {
 		t.Fatalf("couldn't find group type: %s", model.GroupCommittees)
 	}
 
-	expectedCommitteeCount := 1
+	expectedCommitteeCount := 2
 	if len(committees) != expectedCommitteeCount {
 		t.Fatalf("expected '%d', got '%d'", expectedCommitteeCount, len(committees))
 	}
