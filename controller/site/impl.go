@@ -1,6 +1,7 @@
 package site
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/acm-uiuc/core/context"
@@ -31,12 +32,14 @@ func (controller *SiteController) Home(ctx *context.Context) error {
 func (controller *SiteController) About(ctx *context.Context) error {
 	groups, err := controller.svc.Group.GetGroups()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Groups")
+		ctx.String(http.StatusBadRequest, "Failed Getting Groups")
+		return err
 	}
 
 	committees, ok := groups[model.GroupCommittees]
 	if !ok {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Committees")
+		ctx.String(http.StatusBadRequest, "Failed Getting Committees")
+		return fmt.Errorf("Failed Getting Committees")
 	}
 
 	params := struct {
@@ -243,12 +246,14 @@ func (controller *SiteController) Sponsors(ctx *context.Context) error {
 func (controller *SiteController) Sigs(ctx *context.Context) error {
 	groups, err := controller.svc.Group.GetGroups()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Groups")
+		ctx.String(http.StatusBadRequest, "Failed Getting Groups")
+		return err
 	}
 
 	sigs, ok := groups[model.GroupSIGs]
 	if !ok {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Sigs")
+		ctx.String(http.StatusBadRequest, "Failed Getting Sigs")
+		return fmt.Errorf("Failed Getting Sigs")
 	}
 
 	sigsColLeft := sigs[:len(sigs)/2]
@@ -328,7 +333,8 @@ func (controller *SiteController) ResumeUpload(ctx *context.Context) error {
 func (controller *SiteController) UserManager(ctx *context.Context) error {
 	users, err := controller.svc.User.GetUsers()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Users")
+		ctx.String(http.StatusBadRequest, "Failed Getting Users")
+		return err
 	}
 
 	params := struct {
@@ -355,7 +361,8 @@ func (controller *SiteController) RecruiterCreator(ctx *context.Context) error {
 func (controller *SiteController) RecruiterManager(ctx *context.Context) error {
 	users, err := controller.svc.User.GetUsers()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Users")
+		ctx.String(http.StatusBadRequest, "Failed Getting Users")
+		return err
 	}
 
 	// TODO: Use filtering on GetUsers() instead once implemented
@@ -388,18 +395,21 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 
 	user, err := controller.svc.User.GetUser(ctx.Username)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Getting User")
+		ctx.String(http.StatusBadRequest, "Failed Getting User")
+		return err
 	}
 
 	markRole, ok := marksToRole[user.Mark]
 	if !ok {
-		return ctx.String(http.StatusBadRequest, "Invalid User Mark")
+		ctx.String(http.StatusBadRequest, "Invalid User Mark")
+		return fmt.Errorf("Invalid User Mark")
 	}
 	roles = append(roles, markRole)
 
 	isTop4, err := controller.svc.Group.VerifyMembership(ctx.Username, model.GroupCommittees, model.GroupTop4)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Membership Verification")
+		ctx.String(http.StatusBadRequest, "Failed Membership Verification")
+		return err
 	}
 	if isTop4 {
 		roles = append(roles, "Top4")
@@ -469,7 +479,8 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 	resumes, err := controller.svc.Resume.GetResumes()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Resumes")
+		ctx.String(http.StatusBadRequest, "Failed Getting Resumes")
+		return err
 	}
 
 	// TODO: Use filtering on GetResumes() instead once implemented
@@ -494,7 +505,8 @@ func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 func (controller *SiteController) ResumeManager(ctx *context.Context) error {
 	resumes, err := controller.svc.Resume.GetResumes()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Getting Resumes")
+		ctx.String(http.StatusBadRequest, "Failed Getting Resumes")
+		return err
 	}
 
 	params := struct {

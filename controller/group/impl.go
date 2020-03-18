@@ -20,7 +20,8 @@ func New(svc *service.Service) *GroupController {
 func (controller *GroupController) GetGroups(ctx *context.Context) error {
 	groups, err := controller.svc.Group.GetGroups()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Group Lookup")
+		ctx.String(http.StatusBadRequest, "Failed Group Lookup")
+		return err
 	}
 
 	return ctx.JSON(http.StatusOK, &groups)
@@ -35,12 +36,14 @@ func (controller *GroupController) VerifyMembership(ctx *context.Context) error 
 
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Bind")
+		ctx.String(http.StatusBadRequest, "Failed Bind")
+		return err
 	}
 
 	isMember, err := controller.svc.Group.VerifyMembership(req.Username, req.GroupType, req.GroupName)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Membership Verification")
+		ctx.String(http.StatusBadRequest, "Failed Membership Verification")
+		return err
 	}
 
 	return ctx.JSON(http.StatusOK, &struct {

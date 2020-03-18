@@ -21,7 +21,8 @@ func New(svc *service.Service) *UserController {
 func (controller *UserController) GetUser(ctx *context.Context) error {
 	user, err := controller.svc.User.GetUser(ctx.Username)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed User Lookup")
+		ctx.String(http.StatusBadRequest, "Failed User Lookup")
+		return err
 	}
 
 	return ctx.JSON(http.StatusOK, user)
@@ -32,14 +33,16 @@ func (controller *UserController) CreateUser(ctx *context.Context) error {
 
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Bind")
+		ctx.String(http.StatusBadRequest, "Failed Bind")
+		return err
 	}
 
 	req.Mark = model.UserMarkBasic
 
 	err = controller.svc.User.CreateUser(req)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed User Creation")
+		ctx.String(http.StatusBadRequest, "Failed User Creation")
+		return err
 	}
 
 	return ctx.JSON(http.StatusOK, struct{}{})
@@ -48,7 +51,8 @@ func (controller *UserController) CreateUser(ctx *context.Context) error {
 func (controller *UserController) GetUsers(ctx *context.Context) error {
 	users, err := controller.svc.User.GetUsers()
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Users Lookup")
+		ctx.String(http.StatusBadRequest, "Failed Users Lookup")
+		return err
 	}
 
 	return ctx.JSON(http.StatusOK, users)
@@ -62,12 +66,14 @@ func (controller *UserController) MarkUser(ctx *context.Context) error {
 
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Bind")
+		ctx.String(http.StatusBadRequest, "Failed Bind")
+		return err
 	}
 
 	err = controller.svc.User.MarkUser(req.Username, req.Mark)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed User Marking")
+		ctx.String(http.StatusBadRequest, "Failed User Marking")
+		return err
 	}
 
 	return ctx.JSON(http.StatusOK, struct{}{})
@@ -78,12 +84,14 @@ func (controller *UserController) DeleteUser(ctx *context.Context) error {
 
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Bind")
+		ctx.String(http.StatusBadRequest, "Failed Bind")
+		return err
 	}
 
 	err = controller.svc.User.DeleteUser(req.Username)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed User Deletion")
+		ctx.String(http.StatusBadRequest, "Failed User Deletion")
+		return err
 	}
 
 	return ctx.JSON(http.StatusOK, struct{}{})

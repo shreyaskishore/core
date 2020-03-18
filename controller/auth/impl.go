@@ -23,7 +23,8 @@ func (controller *AuthController) GetOAuthRedirect(ctx *context.Context) error {
 
 	uri, err := controller.svc.Auth.GetOAuthRedirect(provider)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Invalid Provider")
+		ctx.String(http.StatusBadRequest, "Invalid Provider")
+		return err
 	}
 
 	return ctx.Redirect(http.StatusFound, uri)
@@ -50,12 +51,14 @@ func (controller *AuthController) GetToken(ctx *context.Context) error {
 
 	err := ctx.Bind(&req)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Bind")
+		ctx.String(http.StatusBadRequest, "Failed Bind")
+		return err
 	}
 
 	token, err := controller.svc.Auth.Authorize(provider, req.Code)
 	if err != nil {
-		return ctx.String(http.StatusBadRequest, "Failed Token Generation")
+		ctx.String(http.StatusBadRequest, "Failed Token Generation")
+		return err
 	}
 
 	ctx.SetCookie(&http.Cookie{
