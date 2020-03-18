@@ -10,7 +10,7 @@ var defaultConfig = map[string]string{
 	"DB_PASS":                "devpass",
 	"DB_HOST":                "(localhost:3306)",
 	"DB_NAME":                "core",
-	"GROUP_URI":              "https://gist.githubusercontent.com/ASankaran/a8f36ebb498a2098a9d49d5fbaf530cd/raw/932e382783b3bfe0fcc65937a7e2a35b1d6de128/groups.yaml",
+	"GROUP_URI":              "https://raw.githubusercontent.com/ASankaran/core/master/data/groups.yaml",
 	"IS_TEST":                "false",
 	"IS_DEV":                 "false",
 	"TEMPLATE_SRCS":          "template/*.html",
