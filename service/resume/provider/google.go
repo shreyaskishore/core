@@ -52,8 +52,11 @@ func (storage *GoogleStorage) GetSignedUri(blobKey string, method string) (strin
 
 			return resp.SignedBlob, nil
 		},
-		Expires:     time.Now().Add(signedUriLifetime * time.Minute),
-		ContentType: "application/pdf",
+		Expires: time.Now().Add(signedUriLifetime * time.Minute),
+	}
+
+	if method != "GET" {
+		signingOpts.ContentType = "application/pdf"
 	}
 
 	signedUri, err := googleStorage.SignedURL(bucketName, blobKey, signingOpts)
