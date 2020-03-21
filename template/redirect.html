@@ -6,20 +6,31 @@
     const code = (new URLSearchParams(window.location.search)).get("code");
     const provider = {{.Provider}};
 
-    fetch("/api/auth/" + provider, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            code: code,
-        }),
-    }).then(res => {
-        return res.json();
-    }).then(data => {
-        window.location.replace("/");
+    var target = (new URLSearchParams(window.location.search)).get("state");
+    if (target == null) {
+        target = "/";
     }
-    )
+
+    // TODO: Use proper parsing of the query params on the
+    // target, then update then and reserialize into a uri
+    if (target[0] != '/') {
+        target += '?code=' + code;
+        window.location.replace(target);
+    } else {
+        fetch("/api/auth/" + provider, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                code: code,
+            }),
+        }).then(res => {
+            return res.json();
+        }).then(data => {
+            window.location.replace(target);
+        })
+    }
 </script>
 Verifying Acount...
 
