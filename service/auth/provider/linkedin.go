@@ -11,28 +11,28 @@ import (
 	"github.com/acm-uiuc/core/config"
 )
 
-type GoogleOAuth struct{}
+type LinkedinOAuth struct{}
 
-func (oauth *GoogleOAuth) GetOAuthRedirect(target string) (string, error) {
-	clientId, err := config.GetConfigValue("OAUTH_GOOGLE_ID")
+func (oauth *LinkedinOAuth) GetOAuthRedirect(target string) (string, error) {
+	clientId, err := config.GetConfigValue("OAUTH_LINKEDIN_ID")
 	if err != nil {
 		return "", fmt.Errorf("failed to get client id: %w", err)
 	}
 
-	redirectUri, err := config.GetConfigValue("OAUTH_GOOGLE_REDIRECT_URI")
+	redirectUri, err := config.GetConfigValue("OAUTH_LINKEDIN_REDIRECT_URI")
 	if err != nil {
 		return "", fmt.Errorf("failed to get oauth redirect: %w", err)
 	}
 
 	uri := url.URL{
 		Scheme: "https",
-		Host:   "accounts.google.com",
-		Path:   "o/oauth2/v2/auth",
+		Host:   "www.linkedin.com",
+		Path:   "oauth/v2/authorization",
 	}
 
 	params := map[string]string{
 		"client_id":     clientId,
-		"scope":         "profile email",
+		"scope":         "r_liteprofile r_emailaddress",
 		"response_type": "code",
 		"redirect_uri":  redirectUri,
 		"state":         target,
@@ -47,54 +47,45 @@ func (oauth *GoogleOAuth) GetOAuthRedirect(target string) (string, error) {
 	return uri.String(), nil
 }
 
-func (oauth *GoogleOAuth) GetOAuthToken(code string) (string, error) {
-	clientId, err := config.GetConfigValue("OAUTH_GOOGLE_ID")
+func (oauth *LinkedinOAuth) GetOAuthToken(code string) (string, error) {
+	clientId, err := config.GetConfigValue("OAUTH_LINKEDIN_ID")
 	if err != nil {
 		return "", fmt.Errorf("failed to get client id: %w", err)
 	}
 
-	clientSecret, err := config.GetConfigValue("OAUTH_GOOGLE_SECRET")
+	clientSecret, err := config.GetConfigValue("OAUTH_LINKEDIN_SECRET")
 	if err != nil {
 		return "", fmt.Errorf("failed to get client secret: %w", err)
 	}
 
-	redirectUri, err := config.GetConfigValue("OAUTH_GOOGLE_REDIRECT_URI")
+	redirectUri, err := config.GetConfigValue("OAUTH_LINKEDIN_REDIRECT_URI")
 	if err != nil {
 		return "", fmt.Errorf("failed to get oauth redirect: %w", err)
 	}
 
 	uri := url.URL{
 		Scheme: "https",
-		Host:   "www.googleapis.com",
-		Path:   "oauth2/v4/token",
+		Host:   "www.linkedin.com",
+		Path:   "oauth/v2/accessToken",
 	}
 
-	params := struct {
-		ClientId     string `json:"client_id"`
-		ClientSecret string `json:"client_secret"`
-		Code         string `json:"code"`
-		RedirectUri  string `json:"redirect_uri"`
-		GrantType    string `json:"grant_type"`
-	}{
-		ClientId:     clientId,
-		ClientSecret: clientSecret,
-		Code:         code,
-		RedirectUri:  redirectUri,
-		GrantType:    "authorization_code",
-	}
+	params := url.Values{}
+	params.Set("client_id", clientId)
+	params.Set("client_secret", clientSecret)
+	params.Set("code", code)
+	params.Set("redirect_uri", redirectUri)
+	params.Set("grant_type", "authorization_code")
 
-	reqBody, err := json.Marshal(params)
-	if err != nil {
-		return "", fmt.Errorf("failed to marshal request body: %w", err)
-	}
+	reqBody := []byte(params.Encode())
 
 	req, err := http.NewRequest("POST", uri.String(), bytes.NewBuffer(reqBody))
 	if err != nil {
 		return "", fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("x-li-format", "json")
 
 	client := http.Client{}
 
@@ -126,12 +117,23 @@ func (oauth *GoogleOAuth) GetOAuthToken(code string) (string, error) {
 	return token.Token, nil
 }
 
-func (oauth *GoogleOAuth) GetVerifiedEmail(token string) (string, error) {
+func (oauth *LinkedinOAuth) GetVerifiedEmail(token string) (string, error) {
 	uri := url.URL{
 		Scheme: "https",
-		Host:   "www.googleapis.com",
-		Path:   "oauth2/v1/userinfo",
+		Host:   "api.linkedin.com",
+		Path:   "v2/emailAddress",
 	}
+
+	params := map[string]string{
+		"q":          "members",
+		"projection": "(elements*(handle~))",
+	}
+
+	query := uri.Query()
+	for key, value := range params {
+		query.Set(key, value)
+	}
+	uri.RawQuery = query.Encode()
 
 	req, err := http.NewRequest("GET", uri.String(), nil)
 	if err != nil {
@@ -140,6 +142,7 @@ func (oauth *GoogleOAuth) GetVerifiedEmail(token string) (string, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
+	req.Header.Set("x-li-format", "json")
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 
 	client := http.Client{}
@@ -157,8 +160,11 @@ func (oauth *GoogleOAuth) GetVerifiedEmail(token string) (string, error) {
 	}
 
 	email := struct {
-		Email      string `json:"email"`
-		IsVerified bool   `json:"verified_email"`
+		Elements []struct {
+			Handle struct {
+				Email string `json:"emailAddress"`
+			} `json:"handle~"`
+		} `json:"elements"`
 	}{}
 
 	err = json.Unmarshal(respBody, &email)
@@ -166,9 +172,9 @@ func (oauth *GoogleOAuth) GetVerifiedEmail(token string) (string, error) {
 		return "", fmt.Errorf("failed to decode response body: %w", err)
 	}
 
-	if !email.IsVerified || email.Email == "" {
+	if len(email.Elements) == 0 || email.Elements[0].Handle.Email == "" {
 		return "", fmt.Errorf("invalid authorization")
 	}
 
-	return email.Email, nil
+	return email.Elements[0].Handle.Email, nil
 }
