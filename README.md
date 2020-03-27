@@ -7,5 +7,8 @@ The design for Core is detailed in `design.md`. This file covers how Core is org
 ## Deployment
 The deployment for Core is detailed in `deployment.md`. This file covers how Core the code in this repository is continuously tested and deployed to the production environment. Note that the latest commit to the master branch is always immediately deployed to production.
 
+## Extension Development
+The documentation for building extensions can be found in `extensions.md`.
+
 ## License
 The license for this repository can be found in `LICENSE`.
