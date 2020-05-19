@@ -239,18 +239,10 @@ func (controller *SiteController) Join(ctx *context.Context) error {
 func (controller *SiteController) ResumeUpload(ctx *context.Context) error {
 	params := struct {
 		Authenticated    bool
-		GraduationMonths []int
-		GraduationYears  []int
-		Degrees          []string
-		Seekings         []string
-		Majors           []string
+		model.ResumeOptions
 	}{
-		Authenticated:    ctx.LoggedIn,
-		GraduationMonths: []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
-		GraduationYears:  []int{2020, 2021, 2022, 2023, 2024, 2025},
-		Degrees:          []string{"Bachlors", "Masters", "PhD"},
-		Seekings:         []string{"Internship", "Co Op", "Full Time"},
-		Majors:           []string{"Computer Science", "Computer Engineering", "Electrical Enginering", "Mathematics", "Other Engineering", "Other Sciences", "Other"},
+		Authenticated: ctx.LoggedIn,
+		ResumeOptions: model.ResumeValidOptions,
 	}
 
 	return ctx.Render(http.StatusOK, "resumeupload", params)
@@ -441,7 +433,7 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 }
 
 func (controller *SiteController) ResumeBook(ctx *context.Context) error {
-	resumes, err := controller.svc.Resume.GetResumes()
+	resumes, err := controller.svc.Resume.GetFilteredResumes(ctx.QueryParams())
 	if err != nil {
 		return ctx.RenderError(
 			http.StatusBadRequest,
@@ -450,8 +442,7 @@ func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 			err,
 		)
 	}
-
-	// TODO: Use filtering on GetResumes() instead once implemented
+	
 	approvedResumes := []model.Resume{}
 	for _, resume := range resumes {
 		if resume.Approved {
@@ -462,16 +453,18 @@ func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 	params := struct {
 		Authenticated bool
 		Resumes       []model.Resume
+		model.ResumeOptions
 	}{
 		Authenticated: ctx.LoggedIn,
 		Resumes:       approvedResumes,
+		ResumeOptions: model.ResumeValidOptions,
 	}
 
 	return ctx.Render(http.StatusOK, "resumebook", params)
 }
 
 func (controller *SiteController) ResumeManager(ctx *context.Context) error {
-	resumes, err := controller.svc.Resume.GetResumes()
+	resumes, err := controller.svc.Resume.GetFilteredResumes(ctx.QueryParams())
 	if err != nil {
 		return ctx.RenderError(
 			http.StatusBadRequest,
@@ -502,9 +495,11 @@ func (controller *SiteController) ResumeManager(ctx *context.Context) error {
 			model.Resume
 			HumanTimestamp string
 		}
+		model.ResumeOptions
 	}{
 		Authenticated: ctx.LoggedIn,
 		Resumes:       extendedResumes,
+		ResumeOptions: model.ResumeValidOptions,
 	}
 
 	return ctx.Render(http.StatusOK, "resumemanager", params)

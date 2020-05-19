@@ -6,6 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"github.com/acm-uiuc/core/config"
+	"github.com/acm-uiuc/core/database/querybuilder"
 	"github.com/acm-uiuc/core/model"
 	"github.com/acm-uiuc/core/service/resume/provider"
 )
@@ -34,9 +35,18 @@ func (service *resumeImpl) UploadResume(resume model.Resume) (string, error) {
 }
 
 func (service *resumeImpl) GetResumes() ([]model.Resume, error) {
-	resumes, err := service.getResumes()
+	resumes, err := service.getFilteredResumes(map[string][]string{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get resumes: %w", err)
+	}
+
+	return resumes, nil
+}
+
+func (service *resumeImpl) GetFilteredResumes(filters map[string][]string) ([]model.Resume, error) {
+	resumes, err := service.getFilteredResumes(filters)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get filtered resumes: %w", err)
 	}
 
 	return resumes, nil
@@ -68,14 +78,19 @@ func (service *resumeImpl) validateResume(resume *model.Resume) error {
 func (service *resumeImpl) addResume(resume *model.Resume) error {
 	_, err := service.db.NamedExec("INSERT INTO resumes (username, first_name, last_name, email, graduation_month, graduation_year, major, degree, seeking, blob_key, approved, updated_at) VALUES (:username, :first_name, :last_name, :email, :graduation_month, :graduation_year, :major, :degree, :seeking, :blob_key, :approved, :updated_at) ON DUPLICATE KEY UPDATE username = :username, first_name = :first_name, last_name = :last_name, email = :email, graduation_month = :graduation_month, graduation_year = :graduation_year, major = :major, degree = :degree, seeking = :seeking, blob_key = :blob_key, approved = :approved, updated_at = :updated_at", resume)
 	if err != nil {
-		fmt.Errorf("failed to add resume to database: %w", err)
+		return fmt.Errorf("failed to add resume to database: %w", err)
 	}
 
 	return nil
 }
 
-func (service *resumeImpl) getResumes() ([]model.Resume, error) {
-	rows, err := service.db.NamedQuery("SELECT * FROM resumes", struct{}{})
+func (service *resumeImpl) getFilteredResumes(filterStrings map[string][]string) ([]model.Resume, error) {
+	query, args, err := querybuilder.FilterQuery("SELECT * FROM resumes", filterStrings, model.Resume{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to construct query with appropriate filters: %w", err)
+	}
+
+	rows, err := service.db.NamedQuery(query, args)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query database for resumes: %w", err)
 	}
