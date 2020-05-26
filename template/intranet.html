@@ -6,7 +6,6 @@
         <div id="links-top" class="row">
             <div id="main-left" class="small-12 medium-12 large-12 columns">
                 <h3>Your information</h3>
-
                 <h5>Hello, {{.Username}}</p>
                 <h6>Role(s): |{{range .Roles}} {{.}} |{{end}}</h6>
             </div>
@@ -24,43 +23,23 @@
 
     <div id="events-container" class="small-12 medium-12 large-3 columns">
         <div id="events-title" class="row">
-        <h2>Links</h2>
+            <h2>Links</h2>
         </div>
         <div id="events" class="row">
-        <div class="event">
             <div class="event">
-            <ul class="dashed">
-                <li><a href="https://www-s.acm.illinois.edu/mailman/listinfo">Mailing Lists </a></li>
-            </ul>
+                {{range .Links}}
+                    <div class="event">
+                        <ul class="dashed">
+                            <li><a href="{{.Uri}}">{{.Name}}</a></li>
+                        </ul>
+                    </div>
+                {{end}}
             </div>
-        </div>
-        </div>
-        <div id="events-title" class="row">
-        <h2>Groups</h2>
-        </div>
-        <div id="events" class="row">
-        <div class="event">
-            <div class="event">
-            <ul class="dashed">
-                <li><a href="https://acm-uiuc.slack.com">ACM Slack</a></li>
-            </ul>
-            </div>
-            <div class="event">
-            <ul class="dashed">
-                <li><a href="https://github.com/acm-uiuc">ACM Github</a></li>
-            </ul>
-            </div>
-            <div class="event">
-            <ul class="dashed">
-                <li><a href="https://www.facebook.com/groups/uiucacm/">ACM FB Group</a></li>
-            </ul>
-            </div>
-        </div>
         </div>
     </div>
-  </div>
-  <div class="footer_padding">
-  </div>
+</div>
+<div class="footer_padding">
+</div>
 
-  {{template "footer" .}}
-  {{end}}
+{{template "footer" .}}
+{{end}}

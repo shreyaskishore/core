@@ -3,6 +3,7 @@ package site
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/acm-uiuc/core/config"
@@ -238,7 +239,7 @@ func (controller *SiteController) Join(ctx *context.Context) error {
 
 func (controller *SiteController) ResumeUpload(ctx *context.Context) error {
 	params := struct {
-		Authenticated    bool
+		Authenticated bool
 		model.ResumeOptions
 	}{
 		Authenticated: ctx.LoggedIn,
@@ -358,75 +359,92 @@ func (controller *SiteController) Intranet(ctx *context.Context) error {
 	}
 	roles = append(roles, markRole)
 
-	isTop4, err := controller.svc.Group.VerifyMembership(ctx.Username, model.GroupCommittees, model.GroupTop4)
+	committees := []string{model.GroupTop4, model.GroupCorporate}
+	for _, committee := range committees {
+		isMember, err := controller.svc.Group.VerifyMembership(ctx.Username, model.GroupCommittees, committee)
+		if err != nil {
+			return ctx.RenderError(
+				http.StatusBadRequest,
+				"Failed Membership Verification",
+				fmt.Sprintf("could not verify if user was a member of %s", committee),
+				err,
+			)
+		}
+		if isMember {
+			roles = append(roles, committee)
+		}
+	}
+
+	intranetUri, err := config.GetConfigValue("INTRANET_URI")
 	if err != nil {
 		return ctx.RenderError(
 			http.StatusBadRequest,
-			"Failed Membership Verification",
-			"could not verify if user was a member of Top4",
+			"Failed Getting Intranet Data",
+			"could not get intranet data uri",
 			err,
 		)
 	}
-	if isTop4 {
-		roles = append(roles, "Top4")
+
+	intranet := model.Intranet{}
+	err = controller.svc.Store.ParseInto(intranetUri, &intranet)
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting Intranet Data",
+			"could not parse intranet data",
+			err,
+		)
 	}
 
-	cards := []struct {
-		Title       string
-		Description string
-		Uri         string
-	}{}
+	checkAccessToCard := func(card model.IntranetCard) (bool, error) {
+		for _, mark := range card.Marks {
+			if user.Mark == strings.ToUpper(mark) {
+				return true, nil
+			}
+		}
 
-	if isTop4 {
-		cards = append(cards, struct {
-			Title       string
-			Description string
-			Uri         string
-		}{
-			Title:       "User Manager",
-			Description: "Manage ACM@UIUC's users",
-			Uri:         "/intranet/usermanager",
-		})
+		for _, group := range card.Groups {
+			isMember, err := controller.svc.Group.VerifyMembership(ctx.Username, model.GroupCommittees, group)
+			if err != nil {
+				return false, err
+			}
+			if isMember {
+				return true, nil
+			}
+		}
+
+		return false, nil
 	}
 
-	if isTop4 {
-		cards = append(cards, struct {
-			Title       string
-			Description string
-			Uri         string
-		}{
-			Title:       "Recruiter Manager",
-			Description: "Manage ACM@UIUC's recruiters",
-			Uri:         "/intranet/recruitermanager",
-		})
-	}
+	cards := []model.IntranetCard{}
+	for _, card := range intranet.Cards {
+		hasAccess, err := checkAccessToCard(card)
+		if err != nil {
+			return ctx.RenderError(
+				http.StatusBadRequest,
+				"Failed Checking Card Access",
+				fmt.Sprintf("could not verify if user has access to card %s", card.Title),
+				err,
+			)
+		}
 
-	if isTop4 {
-		cards = append(cards, struct {
-			Title       string
-			Description string
-			Uri         string
-		}{
-			Title:       "Resume Manager",
-			Description: "Manage ACM@UIUC's resumes",
-			Uri:         "/intranet/resumemanager",
-		})
+		if hasAccess {
+			cards = append(cards, card)
+		}
 	}
 
 	params := struct {
 		Authenticated bool
 		Username      string
 		Roles         []string
-		Cards         []struct {
-			Title       string
-			Description string
-			Uri         string
-		}
+		Cards         []model.IntranetCard
+		Links         []model.IntranetLink
 	}{
 		Authenticated: ctx.LoggedIn,
 		Username:      ctx.Username,
 		Roles:         roles,
 		Cards:         cards,
+		Links:         intranet.Links,
 	}
 
 	return ctx.Render(http.StatusOK, "intranet", params)
@@ -442,7 +460,7 @@ func (controller *SiteController) ResumeBook(ctx *context.Context) error {
 			err,
 		)
 	}
-	
+
 	approvedResumes := []model.Resume{}
 	for _, resume := range resumes {
 		if resume.Approved {

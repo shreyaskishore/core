@@ -1,0 +1,42 @@
+---
+cards:
+  - title: User Manager
+    description: Manage ACM@UIUC's users
+    uri: /intranet/usermanager
+    groups:
+      - Top4
+  - title: Recruiter Manager
+    description: Manage ACM@UIUC's recruiters
+    uri: /intranet/recruitermanager
+    groups:
+      - Top4
+      - Corporate
+  - title: Resume Manager
+    description: Manage ACM@UIUC's resumes
+    uri: /intranet/resumemanager
+    groups:
+      - Top4
+      - Corporate
+  - title: Resume Book
+    description: View ACM@UIUC's resumes
+    uri: /resumebook
+    groups:
+      - Top4
+      - Corporate
+    marks:
+      - Recruiter
+  - title: Resume Upload
+    description: Upload your resume
+    uri: /resumeupload
+    marks:
+      - Basic
+      - Paid
+links:
+  - name: Mailing Lists
+    uri: https://www-s.acm.illinois.edu/mailman/listinfo
+  - name: Slack
+    uri: https://acm-uiuc.slack.com
+  - name: GitHub
+    uri: https://github.com/acm-uiuc
+  - name: Facebook Group
+    uri: https://www.facebook.com/groups/uiucacm
