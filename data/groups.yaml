@@ -2,24 +2,24 @@
 committees:
   - name: Top4
     description: The leadership team for ACM@UIUC
-    chairs: Arnav Sankaran
+    chairs: Cecilia Ding
     email: acm@illinois.edu
     members:
       - role: Chair
-        username: arnavs3
-        displayName: Arnav Sankaran
+        username: cding20
+        displayName: Cecilia Ding
         email: acm@illinois.edu
       - role: Vice Chair
-        username: asdale2
-        displayName: Asher Dale
+        username: svarma4
+        displayName: Shagun Varma
         email: vice-chair@acm.illinois.edu
       - role: Treasurer
-        username: mpj4
-        displayName: Martin Juskelis
+        username: marzukr2
+        displayName: Marzuk Rashid
         email: treasurer@acm.illinois.edu
       - role: Secretary
-        username: devyesh2
-        displayName: Dev Satpathy
+        username: bangaru2
+        displayName: Shresta Bangaru
         email: secretary@acm.illinois.edu
   - name: Admin
     description: The admin team build and maintains ACM@UIUC's infrastructure
@@ -28,6 +28,7 @@ committees:
     members:
       - username: evanw3
       - username: rishipd2
+      - username: arnavs3
   - name: Corporate
     description: >
       The corporate team handles communication with ACM@UIUC's sponsors
@@ -37,16 +38,16 @@ committees:
       - username: cding20
   - name: Events
     description: The events team runs Reflections | Projections and HackIllinois
-    chairs: Arnav Sankaran
+    chairs: Cecilia Ding
     email: events-l@acm.illinois.edu
     members:
       - role: Director of HackIllinois
-        username: myc2
-        displayName: Melissa Chen
+        username: megharm2
+        displayName: Megha Mattikalli
         email: contact@hackillinois.org
       - role: Director of HackIllinois
-        username: sathwik2
-        displayName: Sathwik Pochampally
+        username: rishinp2
+        displayName: Rishin Pandit
         email: contact@hackillinois.org
       - role: Director of Reflections | Projections
         username: sspal2
