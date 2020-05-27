@@ -67,12 +67,20 @@ committees:
         email: projects-l@acm.illinois.edu
   - name: Social
     description: The social team organizes fun events for ACM@UIUC
-    chairs: Nathaniel Cohen
+    chairs: Marcin Pitera
     members:
       - role: Director of Social
-        username: njcohen2
-        displayName: Nathaniel Cohen
+        username: mpiter2
+        displayName: Marcin Pitera
         email: social-l@acm.illinois.edu
+  - name: Outreach
+    description: 
+    chairs: Raghav Saini
+    members:
+      - role: Director of Outreach
+        username: raghav3
+        displayName: Raghav Saini
+        email: ''
 sigs:
   - name: Gamebuilders
     description: Anything and everything related to game development
