@@ -11,6 +11,7 @@ type UserService interface {
 	GetUser(username string) (*model.User, error)
 	CreateUser(user model.User) error
 	GetUsers() ([]model.User, error)
+	GetFilteredUsers(filters map[string][]string) ([]model.User, error)
 	MarkUser(username string, mark string) error
 	DeleteUser(username string) error
 }

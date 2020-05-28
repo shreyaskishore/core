@@ -204,3 +204,100 @@ func TestCreateAndGetAndRemoveAndGetUser(t *testing.T) {
 		t.Fatal("expected no user")
 	}
 }
+
+func TestCreateAndGetFilteredUsers(t *testing.T) {
+	err := setupTest()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	svc, err := user.New()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expectedUser1 := model.User{
+		Username:  "fake",
+		FirstName: "fake",
+		LastName:  "fake",
+		Mark:      model.UserMarkBasic,
+		CreatedAt: 10,
+	}
+
+	expectedUser2 := model.User{
+		Username:  "fake2",
+		FirstName: "fake2",
+		LastName:  "fake2",
+		Mark:      model.UserMarkBasic,
+		CreatedAt: 10,
+	}
+
+	err = svc.CreateUser(expectedUser1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = svc.CreateUser(expectedUser2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = svc.MarkUser(expectedUser2.Username, model.UserMarkPaid)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("no filters", func(t *testing.T) {
+		filters := map[string][]string{}
+
+		users, err := svc.GetFilteredUsers(filters)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		expectedUserCount := 2
+		if len(users) != expectedUserCount {
+			t.Fatalf("No filter test failed: expected '%d', got '%d'", expectedUserCount, len(users))
+		}
+	})
+
+	t.Run("filter by pay", func(t *testing.T) {
+		filters := map[string][]string{
+			"mark": {model.UserMarkPaid},
+		}
+
+		users, err := svc.GetFilteredUsers(filters)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		expectedUserCount := 1
+		if len(users) != expectedUserCount {
+			t.Fatalf("Filter paid user test failed: expected '%d', got '%d'", expectedUserCount, len(users))
+		}
+
+		if users[0].FirstName != expectedUser2.FirstName {
+			t.Fatalf("Wrong user returned: expected '%+v', got '%+v'", expectedUser2, users[0])
+		}
+	})
+
+	t.Run("filter by username", func(t *testing.T) {
+		filters := map[string][]string{
+			"username": {expectedUser2.Username},
+		}
+
+		users, err := svc.GetFilteredUsers(filters)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		expectedUserCount := 1
+		if len(users) != expectedUserCount {
+			t.Fatalf("Filter user by username test failed: expected '%d', got '%d'", expectedUserCount, len(users))
+		}
+
+		if users[0].FirstName != expectedUser2.FirstName {
+			t.Fatalf("Wrong user returned: expected '%+v', got '%+v'", expectedUser2, users[0])
+		}
+	})
+}

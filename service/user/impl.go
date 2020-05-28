@@ -5,6 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 
+	"github.com/acm-uiuc/core/database/querybuilder"
 	"github.com/acm-uiuc/core/model"
 )
 
@@ -40,9 +41,18 @@ func (service *userImpl) CreateUser(user model.User) error {
 }
 
 func (service *userImpl) GetUsers() ([]model.User, error) {
-	users, err := service.getUsers()
+	users, err := service.getFilteredUsers(map[string][]string{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to get infos: %w", err)
+	}
+
+	return users, nil
+}
+
+func (service *userImpl) GetFilteredUsers(filters map[string][]string) ([]model.User, error) {
+	users, err := service.getFilteredUsers(filters)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get filtered users: %w", err)
 	}
 
 	return users, nil
@@ -131,8 +141,13 @@ func (service *userImpl) getUser(username string) (*model.User, error) {
 	return result, nil
 }
 
-func (service *userImpl) getUsers() ([]model.User, error) {
-	rows, err := service.db.NamedQuery("SELECT * FROM users", struct{}{})
+func (service *userImpl) getFilteredUsers(filterStrings map[string][]string) ([]model.User, error) {
+	query, args, err := querybuilder.FilterQuery("SELECT * FROM users", filterStrings, model.User{})
+	if err != nil {
+		return nil, fmt.Errorf("failed to construct query with appropriate filters: %w", err)
+	}
+
+	rows, err := service.db.NamedQuery(query, args)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query database for users: %w", err)
 	}

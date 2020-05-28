@@ -63,7 +63,7 @@ func (controller *UserController) CreateUser(ctx *context.Context) error {
 }
 
 func (controller *UserController) GetUsers(ctx *context.Context) error {
-	users, err := controller.svc.User.GetUsers()
+	users, err := controller.svc.User.GetFilteredUsers(ctx.QueryParams())
 	if err != nil {
 		return ctx.JSONError(
 			http.StatusBadRequest,

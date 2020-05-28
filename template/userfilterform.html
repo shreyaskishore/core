@@ -1,4 +1,4 @@
-{{define "resumefilterform"}}
+{{define "userfilterform"}}
 
 <form id="filter-form">
     <h4>
@@ -6,37 +6,14 @@
         <a class="clear-form" href="?"><i class="fa fa-times-circle"></i> Clear</a>
     </h4>
 
-    <input type="text" name="first_name" placeholder="First Name">
-    <input type="text" name="last_name" placeholder="Last Name">
-    <input type="text" name="username" placeholder="NetID">
-
-    <select name="graduation_month">
-        <option disabled selected hidden value="">Graduation Month</option>
-        {{range .GraduationMonths}}
+    <select name="mark">
+        <option disabled selected hidden value="">Mark</option>
+        {{range .}}
             <option value='{{.}}'>{{.}}</option>
         {{end}}
     </select>
 
-    <select name="graduation_year">
-        <option disabled selected hidden value="">Graduation Year</option>
-        {{range .GraduationYears}}
-            <option value='{{.}}'>{{.}}</option>
-        {{end}}
-    </select>
-
-    <select name="degree">
-        <option disabled selected hidden value="">Level</option>
-        {{range .Degrees}}
-            <option value='{{.}}'>{{.}}</option>
-        {{end}}
-    </select>
-
-    <select name="seeking">
-        <option disabled selected hidden value="">Seeking</option>
-        {{range .Seekings}}
-            <option value='{{.}}'>{{.}}</option>
-        {{end}}
-    </select>
+    <input type="text" name="username" placeholder="Username">
 
     <button class="button" type="submit">Submit</button>
 </form>

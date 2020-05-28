@@ -7,35 +7,38 @@
 			<div id="unapproved-users-partial">
                 {{if not (eq (len .Users) 0)}}
                     <h2>Members</h2>
-                    <table class="table table-striped" id="user-approval-table" class="dynatable-container">
-                        <thead>
-                            <tr>
-                                <th>Action</th>
-                                <th>Netid</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>A Member Since</th>
-                            <tr>
-                        </thead>
-                        <tbody>
-                            {{range .Users}}
+                    <div id="filter-table-container">
+                        {{template "userfilterform" .MarkOptions}}
+                        <table class="table table-striped" id="filter-table" class="dynatable-container">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        {{if eq .Mark "BASIC"}}
-                                            <button id="{{.Username}}-mark-btn" type="button" class="button" onClick="markUserAsPaid({{.Username}})">Mark Paid</button>
-                                            <p id="{{.Username}}-mark" hidden>PAID</p>
-                                        {{else}}
-                                            <p>{{.Mark}}</p>
-                                        {{end}}
-                                    </td>
-                                    <td>{{.Username}}</td>
-                                    <td>{{.FirstName}}</td>
-                                    <td>{{.LastName}}</td>
-                                    <td>{{.HumanTimestamp}}</td>
-                                </tr>
-                            {{end}}
-                        </tbody>
-                    </table>
+                                    <th>Action</th>
+                                    <th>Netid</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>A Member Since</th>
+                                <tr>
+                            </thead>
+                            <tbody>
+                                {{range .Users}}
+                                    <tr>
+                                        <td>
+                                            {{if eq .Mark "BASIC"}}
+                                                <button id="{{.Username}}-mark-btn" type="button" class="button" onClick="markUserAsPaid({{.Username}})">Mark Paid</button>
+                                                <p id="{{.Username}}-mark" hidden>PAID</p>
+                                            {{else}}
+                                                <p>{{.Mark}}</p>
+                                            {{end}}
+                                        </td>
+                                        <td>{{.Username}}</td>
+                                        <td>{{.FirstName}}</td>
+                                        <td>{{.LastName}}</td>
+                                        <td>{{.HumanTimestamp}}</td>
+                                    </tr>
+                                {{end}}
+                            </tbody>
+                        </table>
+                    </div>
                     {{else}}
                         <h5>You have no users. That's a problem.</h5>
                     {{end}}
