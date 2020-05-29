@@ -1,0 +1,127 @@
+---
+content:
+  - >
+    ACM@UIUC is a student chapter of the Association for Computing Machinery,
+    a professional society dedicated to advancing human capabilities through
+    information technology. Founded in 1947, the Association for Computing
+    Machinery (ACM) is the largest and oldest international scientific and
+    educational computer society in the industry today. Organized only a year
+    after the unveiling of ENIAC, the first general purpose electronic
+    computer, ACM was established by mathematicians and electrical engineers
+    to advance the science and application of information technology.
+  - >
+    ACM@UIUC is a group of dedicated people who are interested in exploring
+    the possibilities of computers and learning more about how to use and
+    develop them. ACM is divided into Special Interest Groups, or SIGs, which
+    focus on specific interest areas in computer science and computing. Each
+    SIG holds its own meetings. Each SIG is responsible for organizing its own
+    activities and determining its own purpose. Several SIGs are project based,
+    with the majority of their activities dedicated to computing projects in
+    their area of interest, often presented at Engineering Open House. Some
+    SIGs run workshops and tech talks to discuss topics related to their
+    interest group. To find out more about our SIGs, visit the SIG page and
+    attend a meeting.
+  - >
+    ACM also hosts several general events, which are listed on our calendar
+    page. These events include social activities (such as picnics, swim nights,
+    activity weeks, game nights), outreach activities (such as ACM Open House,
+    Student Lecture Series, and educational activities for high school and
+    middle school students), and the annual Reflections | Projections
+    conference. All ACM activities and SIG meetings are open to the entire
+    University community, regardless of computer experience and background.
+  - >
+    ACM@UIUC holds an Executive meetings most Mondays, at which the direction
+    of ACM is defined. Everyone is welcome to attend and make suggestions for
+    new ACM groups or events. Decisions about such events and other important
+    ACM matters are also made at these meetings.
+facilites:
+  - location: 1104 Siebel
+    name: The ACM Office
+    description: >
+      The ACM@UIUC office is located in room 1104 of the Thomas M.
+      Siebel Center for Computer Science along the main hallway. ACM's office
+      space includes 3 rooms and limited access to the student projects and
+      embedded real-time systems labs, all thanks to the Computer Science
+      Department. The ACM Office is open from 9 AM to 5 PM most schooldays, and
+      is manned by members of the Exec Board. Although our official hours are 9
+      to 5, members (especially the sysadmins) have been known to haunt the
+      office until the wee hours of the morning. Stop in and join the ACM Up
+      All Night Crew.
+  - location: 1106 Siebel
+    name: ACM Computer Lab
+    description: >
+      While there are computers in both 1104 and 1110, 1106 is home
+      to the majority of the ACM Cluster. 1106 is frequently used for SIG dev
+      sessions and tutorials. 1106 is also home to Merch, ACM's own networked
+      soda machine (thanks to SIGBot and Corporate Committee).
+  - location: 1110 Siebel
+    name: ACM Electronics and Robotics Lab
+    description: >
+      1110 is ACM's electronics and robotics lab. It is home to many
+      hardware-intensive SIGs which need extra space and gear to work on their
+      projects. Among the groups that use 1110 frequently are SIGBot and
+      SIGMusic. Access to 1110 is generally restricted due to the nature of the
+      lab, and permitted where project work requires use of the lab.
+links:
+  - name: The Association for Computing Machinery<
+    uri: https://acm.org
+  - name: Department of Computer Science
+    uri: https://cs.illinois.edu
+  - name: Department of Electrical and Computer Engineeering
+    uri: https://ece.illinois.edu
+  - name: College of Engineering
+    uri: https://grainger.illinois.edu/
+history:
+  events:
+    - year: 1965
+      title: A Group starts to form
+      body: >
+        Students at University of Illinois start to create a group for those
+        interested in computing, ultimately leading to the formation of
+        ACM@UIUC.
+    - year: 1967
+      title: ACM@UIUC gets its charter
+      body: >
+        On Nov 1st, 1967 the Association for Computing Machinery Student
+        Chapter at the University of Illinois was chartered to create an
+        organization for those interested in Computers.
+    - year: 1982
+      title: ACM@UIUC becomes 2nd largest ACM student chapter
+      body: >
+        ACM@UIUC is the second largest ACM student chapter in the nation
+        with 250 members. This year ACM's Team wins east section of the
+        Central Regional Scholastic Programming Contest, a programming
+        contest in FORTRAN.
+    - year: 1993
+      title: Caffeine comes online
+      body: >
+        A staple of the office, Caffeine was an internet connected vending
+        machine, one of the first devices connected to internet connected,
+        and was maintained by SIGArch and later SIGBot. It has undergone
+        multiple upgrades and overhauls overtime including the current version
+        called Merch.
+    - year: 1995
+      title: Reflections | Projections
+      body: >
+        The first Midwestern ACM Chapter Conference, later named
+        Reflections | Projections was held, starting a ongoing year tradition
+        of ACM@UIUC hosting students, academics and members of industry for a
+        conference on the past and the future. Notable speakers over the years
+        included Steve Wozniak, Aaron Swartz and Max Levchin. R|P also has
+        included an AI Programming competition called Mechmania since its
+        inception.
+    - year: 2014
+      title: HackIllinois
+      body: >
+        In 2014 the first HackIllinois occurred where students from UIUC and
+        across the nation came to Siebel Center to hack for 36 hours. Over
+        the years HackIllinois has been regarded in the hackathon community as
+        an incredibly fun and well-run event, and more recently its focus on
+        introducing students to Open Source has made it unique in the world of
+        hackathons.
+    - year: 2017
+      title: ACM@UIUC turns 50 years old
+      body: >
+        ACM@UIUC turns 50 years old, with about 500 members, 18 SIGs, 2
+        flagship events and continues to be an open community for those
+        interested in computing.

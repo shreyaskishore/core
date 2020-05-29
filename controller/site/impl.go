@@ -23,10 +23,33 @@ func New(svc *service.Service) *SiteController {
 }
 
 func (controller *SiteController) Home(ctx *context.Context) error {
+	homeUri, err := config.GetConfigValue("HOME_URI")
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting Home Data",
+			"could not get about home uri",
+			err,
+		)
+	}
+
+	home := model.Home{}
+	err = controller.svc.Store.ParseInto(homeUri, &home)
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting Home Data",
+			"could not parse home data",
+			err,
+		)
+	}
+
 	params := struct {
 		Authenticated bool
+		Home          model.Home
 	}{
 		Authenticated: ctx.LoggedIn,
+		Home:          home,
 	}
 
 	return ctx.Render(http.StatusOK, "home", params)
@@ -53,22 +76,68 @@ func (controller *SiteController) About(ctx *context.Context) error {
 		)
 	}
 
+	aboutUri, err := config.GetConfigValue("ABOUT_URI")
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting About Data",
+			"could not get about data uri",
+			err,
+		)
+	}
+
+	about := model.About{}
+	err = controller.svc.Store.ParseInto(aboutUri, &about)
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting About Data",
+			"could not parse about data",
+			err,
+		)
+	}
+
 	params := struct {
 		Authenticated bool
 		Committees    []model.Group
+		About         model.About
 	}{
 		Authenticated: ctx.LoggedIn,
 		Committees:    committees,
+		About:         about,
 	}
 
 	return ctx.Render(http.StatusOK, "about", params)
 }
 
 func (controller *SiteController) History(ctx *context.Context) error {
+	aboutUri, err := config.GetConfigValue("ABOUT_URI")
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting About Data",
+			"could not get about data uri",
+			err,
+		)
+	}
+
+	about := model.About{}
+	err = controller.svc.Store.ParseInto(aboutUri, &about)
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting About Data",
+			"could not parse about data",
+			err,
+		)
+	}
+
 	params := struct {
 		Authenticated bool
+		History       model.AboutHistory
 	}{
 		Authenticated: ctx.LoggedIn,
+		History:       about.History,
 	}
 
 	return ctx.Render(http.StatusOK, "history", params)
@@ -141,10 +210,33 @@ func (controller *SiteController) HackIllinois(ctx *context.Context) error {
 }
 
 func (controller *SiteController) Sponsors(ctx *context.Context) error {
+	sponsorsUri, err := config.GetConfigValue("SPONSORS_URI")
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting Sponsor Data",
+			"could not get sponsor data uri",
+			err,
+		)
+	}
+
+	sponsors := model.Sponsors{}
+	err = controller.svc.Store.ParseInto(sponsorsUri, &sponsors)
+	if err != nil {
+		return ctx.RenderError(
+			http.StatusBadRequest,
+			"Failed Getting Sponsor Data",
+			"could not parse sponsor data",
+			err,
+		)
+	}
+
 	params := struct {
 		Authenticated bool
+		Sponsors      model.Sponsors
 	}{
 		Authenticated: ctx.LoggedIn,
+		Sponsors:      sponsors,
 	}
 
 	return ctx.Render(http.StatusOK, "sponsors", params)
