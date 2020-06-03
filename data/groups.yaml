@@ -195,3 +195,11 @@ sigs:
     meetingLocation: Siebel 2407
     website: ''
     email: reedoei2@illinois.edu
+  - name: SIGCloud
+    description: Special Interest Group for Cloud Computing
+    chairs: Shreyas Kishore
+    meetingTime: TBD
+    meetingLocation: TDB
+    website: ''
+    email: kishore4@illinois.edu
+
